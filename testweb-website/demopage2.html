@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <title>Demo Page Two</title>
+</head>
+<body>
+<div id="navigation"></div>
+<script>
+    $(function(){
+      $("#navigation").load("navigation.html");
+    });
+</script>
+<div class="container-sm">
+    <div class="container text-left">
+        <div class="row">
+            <div class="col">
+                <table data-testid="Table-Basic" class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-4 text-left">
+        <div class="row g-4">
+            <table data-testid="Table-One" id="table1" class="table">
+                <thead>
+                <tr>
+                    <th>H1</th>
+                    <th>H2</th>
+                    <th>H3</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>R1</td>
+                    <td><span>R1B</span></td>
+                    <td><input data-testid="CheckBox-DoIt" class="form-check-input" type="checkbox" id="l3cb"><label class="form-check-label">Do It</label></td>
+                </tr>
+                <tr>
+                    <td>R2</td>
+                    <td><span>R2B</span></td>
+                    <td><input data-testid="CheckBox-DoIt" class="form-check-input" type="checkbox" id="l3cb"><label class="form-check-label">Do It</label></td>
+                </tr>
+                </tbody>
+            </table>
+            <table data-testid="Table-Two" id="table2" class="table">
+                <thead>
+                <tr>
+                    <th>H12</th>
+                    <th>H22</th>
+                    <th>H32</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>R12</td>
+                    <td><span>R12B</span></td>
+                    <td>
+                        <input data-testid="CheckBox-DoIt" class="form-check-input" type="checkbox" id="l3cb"><label class="form-check-label">Do It</label>
+                        <select data-testid="ComboBox-State-button" class="form-select" aria-label="Default select example">
+                            <option>Pending</option>
+                            <option>Active</option>
+                            <option>Retired</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>R22</td>
+                    <td><span>R22B</span></td>
+                    <td>
+                        <input data-testid="CheckBox-DoIt" class="form-check-input" type="checkbox" id="l3cb"><label class="form-check-label">Do It</label>
+                        <select data-testid="ComboBox-State-button" class="form-select" aria-label="Default select example">
+                            <option>Pending</option>
+                            <option>Active</option>
+                            <option>Retired</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <title>Home Page</title>
+</head>
+<body>
+<div id="navigation"></div>
+<script>
+    $(function() {
+      $("#navigation").load("navigation.html");
+    });
+
+    $("#buttonReset").click(function () {
+      $("#formMain")[0].reset();
+      return false;
+    });
+</script>
+<div class="container-sm">
+    <form id="formMain">
+        <div class="mb-3">
+            <label data-testid="Label-SomeText" for="someText" class="form-label">Whatever</label>
+            <input data-testid="TextBox-Whatever" type="text" class="form-control" id="someText" disabled>
+        </div>
+        <div class="mb-3">
+            <label data-testid="Label-Email" for="email" class="form-label">Email address</label>
+            <input data-testid="TextBox-Email" type="email" class="form-control" id="email" placeholder="name@example.com">
+        </div>
+        <div class="mb-3">
+            <label data-testid="Label-Number" for="someNumber" class="form-label">Some Number</label>
+            <input data-testid="TextBox-Number" type="number" class="form-control" id="someNumber" placeholder="999.99">
+        </div>
+        <div class="mb-3">
+            <label data-testid="Label-Date" for="someDate" class="form-label">Some Date</label>
+            <input data-testid="TextBox-Date" type="date" class="form-control" id="someDate">
+        </div>
+        <div class="mb-3">
+            <label data-testid="Label-Phone" for="phoneNumber" class="form-label">Phone Number</label>
+            <input data-testid="TextBox-Phone" type="tel" class="form-control" id="phoneNumber" placeholder="999-999-9999"
+                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+        </div>
+        <div class="mb-3">
+            <label data-testid="Label-Message" for="message" class="form-label">Message</label>
+            <textarea data-testid="TextBox-Message" class="form-control" id="message" rows="3"></textarea>
+        </div>
+        <label data-testid="Label-Password" for="inputPassword5" class="form-label">Password</label>
+        <input data-testid="TextBox-Password" type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+        <div data-testid="Label-PasswordInstructions" id="passwordHelpBlock" class="form-text">
+            Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+        </div>
+        <input data-testid="Button-Submit" class="btn btn-primary" type="submit" value="Submit">
+        <input data-testid="Button-Reset" id="buttonReset" class="btn btn-primary" type="reset" value="Reset">
+        <input data-testid="Button-Load" id="buttonLoad" class="btn btn-primary" type="button" value="Load" onclick="loadData()">
+
+    </form>
+</div>
+</body>
+</html>

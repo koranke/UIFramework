@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <title>Demo Page One</title>
+</head>
+<body>
+<div id="navigation"></div>
+<script>
+    $(function(){
+      $("#navigation").load("navigation.html");
+    });
+</script>
+<div class="container-sm">
+    <div class="container text-left">
+        <div class="row">
+            <div class="col">
+                <select data-testid="ComboBox-Standard-button" class="form-select" aria-label="Default select example">
+                    <option selected>--Select an option--</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="form-check">
+                    <input data-testid="CheckBox-Default" class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input data-testid="CheckBox-Other" class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Other
+                    </label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-check">
+                    <input data-testid="RadioButton-Option1" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Option 1
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input data-testid="RadioButton-Option2" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Option 2
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-40 text-left">
+        <div class="row g-4">
+            <ul data-testid="List-One" class="list-group">
+                <li class="list-group-item">An item</li>
+                <li class="list-group-item">A second item</li>
+                <li class="list-group-item">A third item</li>
+                <li class="list-group-item">A fourth item</li>
+                <li class="list-group-item">And a fifth one</li>
+            </ul>
+            <ul data-testid="List-Two" class="list-group">
+                <li class="list-group-item active" aria-current="true">An active item</li>
+                <li class="list-group-item">A second item</li>
+                <li class="list-group-item">A third item</li>
+                <li class="list-group-item">A fourth item</li>
+                <li class="list-group-item">And a fifth one</li>
+            </ul>
+            <ul data-testid="List-Complex" class="list-group" id="list3">
+                <li class="list-group-item"><label>Option</label> | <label>Selected</label></li>
+                <li class="list-group-item"><input data-testid="CheckBox-Option" class="form-check-input" type="checkbox" id="l3cb">
+                    <label data-testid="Label-Option" class="form-check-label" for="flexRadioDefault1">Option 11</label></li>
+                <li class="list-group-item"><input data-testid="CheckBox-Option" class="form-check-input" type="checkbox" id="l3cb">
+                    <label data-testid="Label-Option" class="form-check-label" for="flexRadioDefault1">Option 22</label></li>
+                <li class="list-group-item"><input data-testid="CheckBox-Option" class="form-check-input" type="checkbox" id="l3cb">
+                    <label data-testid="Label-Option" class="form-check-label" for="flexRadioDefault1">Option 33</label></li>
+                <li class="list-group-item"><input data-testid="CheckBox-Option" class="form-check-input" type="checkbox" id="l3cb">
+                    <label data-testid="Label-Option" class="form-check-label" for="flexRadioDefault1">Option 44</label></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
