@@ -11,7 +11,7 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.comparison.ImageDiff;
 import ru.yandex.qatools.ashot.comparison.ImageDiffer;
-import ui.FrameworkConstants;
+import configuration.FrameworkConstants;
 import utilities.Log;
 import utilities.SystemHelper;
 

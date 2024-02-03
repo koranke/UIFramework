@@ -2,19 +2,12 @@ package swaglabs;
 
 
 import general.TestBase;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import saucedemo.SauceDemoSite;
 import saucedemo.pages.loginPage.LoginPage;
 import saucedemo.pages.productsPage.ProductsPage;
-import ui.core.SeleniumManager;
 
 public class SwagLabsTests extends TestBase {
-
-//	@BeforeClass
-//	public void setup() {
-//		SeleniumManager.setSlowTime(500);
-//	}
 
 	@Test
 	public void testShoppingCart() {

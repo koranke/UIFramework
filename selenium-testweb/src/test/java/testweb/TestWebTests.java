@@ -3,11 +3,12 @@ package testweb;
 import general.TestBase;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import testweb.pages.demoone.DemoOnePage;
-import testweb.pages.demothree.DemoThreePage;
-import testweb.pages.demothree.PanelDetails;
-import testweb.pages.demotwo.DemoTwoPage;
-import testweb.pages.home.HomePage;
+import ui.sites.testweb.TestWebSite;
+import ui.sites.testweb.pages.demoone.DemoOnePage;
+import ui.sites.testweb.pages.demothree.DemoThreePage;
+import ui.sites.testweb.pages.demothree.PanelDetails;
+import ui.sites.testweb.pages.demotwo.DemoTwoPage;
+import ui.sites.testweb.pages.home.HomePage;
 
 import java.util.ArrayList;
 import java.util.List;

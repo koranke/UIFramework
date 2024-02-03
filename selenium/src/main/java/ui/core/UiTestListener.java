@@ -6,7 +6,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
-import ui.FrameworkConstants;
+import configuration.FrameworkConstants;
 import utilities.Log;
 
 import java.io.File;

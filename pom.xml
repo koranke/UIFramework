@@ -13,6 +13,9 @@
         <module>selenium</module>
         <module>selenium-swaglabs</module>
         <module>selenium-testweb</module>
+        <module>playwright</module>
+        <module>playwright-swaglabs</module>
+        <module>playwright-testweb</module>
     </modules>
 
     <properties>

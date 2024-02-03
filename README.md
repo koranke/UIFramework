@@ -1,16 +1,43 @@
 # UI Automation Framework
-This framework uses a Page Control Object Model (PCOM) approach for automation.  This involves modeling a web page 
+The goal of this framework is to minimize test complexity and cost of maintenance.
+It uses a Page Control Object Model (PCOM) approach for automation.  This involves modeling a web page 
 through a series of classes, which represent the web page and any child dialogs ("panels"), tables and lists. It also 
 involves classes that model the core controls that a page may contain, like text boxes, check boxes, combo boxes and buttons.  
 At the top level is a class that represents the website and exposes all the available pages.  Tests drive actions
-by utilizing the PCOM classes rather than directly calling the underlying automation technology, like Selenium or Playwright.
+by utilizing the PCOM classes rather than directly calling the underlying UI automation technology.
+
+Currently this project is more of a proof-of-concept that demonstrates certain patterns and approaches to UI automation
+rather than a fully-featured framework that can be dropped in as a dependency and immediately used.  It handles standard
+HTML elements but may be missing some element support and has no element support for any popular custom web control
+libraries.  There are two versions, one for Selenium and one for Playwright.  From a test perspective, they work the same. 
+
+## Project Structure
+
+### Core
+Common code regardless of underlying UI framework.
+
+### Playwright
+PCOM framework using Playwright.
+
+### Selenium
+PCOM framework using Selenium.
+
+### Playwright-swaglabs / Selenium-swaglabs
+Example PCOM classes and tests when hand-coding classes.  Uses the live swaglabs demo website as the application under test.
+
+### Playwright-testweb / Selenium-testweb
+Example PCOM classes and tests when auto-generating classes.  Uses the sample "testweb" website as the application under test.
+You must run a local webserver to host the website before running tests.
+
 
 ## Getting Started
 Before tests can be written for any web page, the PCOM classes for the web page must be created.  This can be done
 manually by inspecting the web page, identifying the reference needed for each page element, and constructing the
 required classes.  In the most simple case, for a web page with no panels, tables or lists, then a single "page" class
 is all that is needed for working with the page.  In addition, a "site" class is needed as a container for any pages.
-For web pages that include repeating elements, for example, a table the displays rows of records,
+For web pages that include repeating elements, for example, a table that displays rows of records, then a class needs to
+be created for the table that defines how to reference the table, a row, and also defines the repeating elements
+in each row.
 
 Optionally, PCOM classes can be automatically generated using the Page Control Object Model Generator (see below).
 This is only an option if the web page includes embedded "data-testid" attributes for all elements of interest.
@@ -71,24 +98,30 @@ To run the PCOM generator, open the test class "PageGeneratorTests" and do the f
 2. If this is your first time to do this, add the below setting in IntelliJ, Help->Edit custom VM options and restart.
    -Deditable.java.test.console=true
 
-3. In the PageGeneratorTests class, go to the declarations section for your target website.
-4. Add private member declaration for new page that includes the portal URL for the page.  For example...
+3. In the "selenium" project, update the class "TargetPortal" to include the new website you want to work on.
+4. In the PageGeneratorTests class, go to the declarations section for your target website.
+5. Update the projectPath and baseClassPackagePath variables to configure output location for class files.  Output location
+should be something like src/main/java/ui/sites/<sitename>.
+6. In the output location, copy the "testweb" template package and update names to match target website.
+7. Add private member declaration for new page that includes the website URL for the page.  For example...
 
 ```java
 private static final String homeUrl = "/home.html";
 ```
 
-5. In the constructor add the page URL to url map along with name for page.  For example...
+8. In the constructor add the page URL to url map along with name for page.  For example...
 
 ```java
         pageUrlMap.put(homeUrl, "Home");
 ```
-
-6. Update the method "makeSinglePageForSite" for new page and run.
-7. This will open the website and navigate to the desired page (if possible) and scan all available controls.  
+9. Update the method "makeSinglePageForSite" for new page and run.
+10. This will open the website and navigate to the desired page (if possible) and scan all available controls.  
    In the output window, there will be a prompt to either scan for more controls or finish.  Some pages may have hidden
    controls that are only visible after clicking a button or doing some action.  If needed, perform the action to expose
    other controls and then enter "Y" to scan it.  Otherwise, press ENTER to finish.
+
+Note that if the website includes a login page the must be navigated before reaching other pages, then first generate
+the classes for the login page and update the "site" class with this page before working on other pages.
 
 ## Using the UI framework
 All tests need to create an instance of the desired website in order to interact with web pages.  The website
@@ -98,13 +131,5 @@ web pages and their controls.  Example test...
 ```java
     public void testSomething() {
             HomePage homePage = new TestWebSite().homePage().goTo();
-            homePage.textBoxWhatever.assertIsNotEnabled();
-            homePage.textBoxEmail.assertIsEnabled();
-            homePage.textBoxEmail.setText("george@outlook.com");
-            homePage.textBoxNumber.typeText("abc");
-            homePage.textBoxNumber.assertText("");
-            homePage.textBoxNumber.typeText("123");
-            homePage.textBoxNumber.assertText("123");
-            homePage.buttonSubmit.click();
         }
 ```

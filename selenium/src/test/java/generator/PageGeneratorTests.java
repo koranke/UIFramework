@@ -18,7 +18,7 @@ public class PageGeneratorTests {
 
     //--------------TEST WEB SITE-------------------------------------------
     private static final String baseClassPackagePath = projectPath
-            + "src/main/java/ui/sites/testweb/pages/";
+            + "selenium/src/main/java/ui/sites/testweb/pages/";
     private static final String homeUrl = "home.html";
     private static final String demoPage1Url = "demopage1.html";
     private static final String demoPage2Url = "demopage2.html";
@@ -40,8 +40,8 @@ public class PageGeneratorTests {
     }
 
     public void makeSinglePageForSite() {
-        PageControlModelGenerator.makePage(baseClassPackagePath, demoPage3Url,
-                pageUrlMap.get(demoPage3Url), TargetPortal.TEST_WEB);
+        PageControlModelGenerator.makePage(baseClassPackagePath, homeUrl,
+                pageUrlMap.get(homeUrl), TargetPortal.TEST_WEB);
     }
 
 }
