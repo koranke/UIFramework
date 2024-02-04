@@ -13,7 +13,9 @@ Usage
 * headerControlId: optional.  Xpath string for identifying the header row relative to the root parent element. Set this
 if "headerUsesRowLocatorPattern" is false.
  */
-public abstract class ListControl extends BaseControl {
+public abstract class ListControl<T> extends BaseControl {
+    protected int currentRow;
+    protected RepeatingControl<Label> searchLabel;
     protected String rowLocatorPattern;
     protected boolean hasHeader;
     protected boolean headerUsesRowLocatorPattern;
@@ -47,4 +49,13 @@ public abstract class ListControl extends BaseControl {
         }
     }
 
+    public T withRow(int row) {
+        this.currentRow = row;
+        return (T) this;
+    }
+
+    public T withRow(String text) {
+        this.currentRow = searchLabel.getIndex(text);
+        return (T) this;
+    }
 }

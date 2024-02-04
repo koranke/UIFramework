@@ -1,15 +1,19 @@
 package saucedemo.pages.loginPage;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.openqa.selenium.By;
 import saucedemo.SauceDemoSite;
 import saucedemo.pages.BaseSauceDemoPage;
 import ui.core.controls.Button;
 import ui.core.controls.TextBox;
 
+@Getter()
+@Accessors(fluent = true)
 public class LoginPage extends BaseSauceDemoPage<LoginPage> {
-	public TextBox textBoxUserName;
-	public TextBox textBoxPassword;
-	public Button buttonLogin;
+	private final TextBox textBoxUserName;
+	private final TextBox textBoxPassword;
+	private final Button buttonLogin;
 
 	public LoginPage(SauceDemoSite site) {
 		super(site, "");

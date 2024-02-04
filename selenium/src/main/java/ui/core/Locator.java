@@ -2,6 +2,7 @@ package ui.core;
 
 import lombok.Getter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,11 +13,11 @@ import java.time.Duration;
 import java.util.List;
 
 public class Locator {
-	private WebDriver webDriver;
+	private final WebDriver webDriver;
 	private WebElement parentElement;
 
 	@Getter
-	private By by;
+	private final By by;
 	private Integer index;
 	private Locator next;
 
@@ -112,13 +113,13 @@ public class Locator {
 	}
 
 	public boolean isVisible(int maxWaitTimeInSeconds) {
-		FluentWait<WebElement> wait = new FluentWait<>(getElement())
+		try {
+			FluentWait<WebElement> wait = new FluentWait<>(getElement())
 				.withTimeout(Duration.ofSeconds(maxWaitTimeInSeconds))
 				.pollingEvery(Duration.ofMillis(100));
 
-		try {
 			return wait.until(WebElement::isDisplayed);
-		} catch (TimeoutException e) {
+		} catch (TimeoutException | NoSuchElementException e) {
 			return false;
 		}
 	}
@@ -128,13 +129,13 @@ public class Locator {
 	}
 
 	public boolean isNotVisible(int maxWaitTimeInSeconds) {
-		FluentWait<WebElement> wait = new FluentWait<>(getElement())
+		try {
+			FluentWait<WebElement> wait = new FluentWait<>(getElement())
 				.withTimeout(Duration.ofSeconds(maxWaitTimeInSeconds))
 				.pollingEvery(Duration.ofMillis(100));
 
-		try {
 			return wait.until(e -> !e.isDisplayed());
-		} catch (TimeoutException e) {
+		} catch (TimeoutException | NoSuchElementException e2) {
 			return true;
 		}
 	}

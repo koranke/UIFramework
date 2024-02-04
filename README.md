@@ -2,7 +2,7 @@
 The goal of this framework is to make tests as easy to write as possible, minimizing test complexity and cost of maintenance.
 It uses a Page Control Object Model (PCOM) approach for automation.  This involves modeling a web page 
 through a series of classes, which represent the web page and any child dialogs ("panels"), tables and lists. It also 
-involves classes that model the core controls that a page may contain, like text boxes, check boxes, combo boxes and buttons.  
+involves classes that model the core controls that a page may contain, like text boxes, check boxes, combo boxes and buttons.
 At the top level is a class that represents the website and exposes all the available pages.  Tests drive actions
 by utilizing the PCOM classes rather than directly calling the underlying UI automation technology.
 
@@ -10,6 +10,23 @@ Currently, this project is more of a proof-of-concept that demonstrates certain 
 rather than a fully-featured framework that can be dropped in as a dependency and immediately used.  It handles standard
 HTML elements but may be missing some element support, and it has no element support for any popular custom web control
 libraries.  There are two versions, one for Selenium and one for Playwright.  From a test perspective, they work the same. 
+
+## Features
+* Easily discoverable and easy to code, thanks to auto-completion in the IDE.  Standard line in a test follows the pattern
+```website.pagex().controlx.actionx()``` or ```website.pagex().actionx()```. After each dot, IDE code completion will display the available options. 
+For example, what pages are available for the website, what controls are available for a page, what actions are available for a 
+particular page or control?
+* Automatic logging of test activity and automatic log rotation between test runs.
+* Automatic screenshots on a test failure.
+* Built-in asserts for controls like textboxes, etc.  For example, ```welcomePage.textBoxName.assertText("George")```.
+* Built-in visual asserts.  For example, ```homepage.assertScreenshot()```.  Configurable to permit some pixel differences.
+Also supports masking (hiding) some controls on a page so that they are not included in the screenshot comparison. 
+* Configurable through a properties file, optionally for different environments, and also supports overrides through
+environment variables.  Allows for setting things like target browser and headless mode.
+* Built-in "slow time" feature ("slowmo" feature from Playwright) for both Playwright and Selenium to aid in debugging.
+* Built-in support for running tests in parallel.
+* Built-in support for initializing and cleaning up Playwright or Selenium resources.
+* Easily interact with repeating elements.  For example, ```productsPage.listProducts.labelPrice.get(2).assertText("12.50")"```
 
 ## Project Structure
 

@@ -1,24 +1,26 @@
 package saucedemo.pages.productsPage;
 
-import com.microsoft.playwright.Locator;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import saucedemo.SauceDemoSite;
+import ui.core.controls.Button;
 import ui.core.controls.Label;
 import saucedemo.pages.BaseSauceDemoPage;
 
-import java.util.List;
-
+@Getter()
+@Accessors(fluent = true)
 public class ProductsPage extends BaseSauceDemoPage<ProductsPage> {
-	public Label title;
-	public ListProducts listProducts;
+	private final Label labelTitle;
+	private final ListProducts listProducts;
+	private final Button buttonCart;
+	private final Label labelCartCount;
 
 	public ProductsPage(SauceDemoSite site) {
 		super(site, "inventory.html");
-		title = new Label(site.page.locator("//span[@class='title']"));
+		labelTitle = new Label(site.page.locator("//span[@class='title']"));
 		listProducts = new ListProducts(site.page.locator("//div[@class='inventory_list']"));
+		buttonCart = new Button(site.page.locator("//a[@class='shopping_cart_link']"));
+		labelCartCount = new Label(site.page.locator("//span[@class='shopping_cart_badge']"));
 	}
 
-	public List<Locator> getMask() {
-
-		return null;
-	}
 }

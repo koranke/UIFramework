@@ -2,6 +2,7 @@ package saucedemo;
 
 import com.microsoft.playwright.Browser;
 import enums.TargetBrowser;
+import saucedemo.pages.cartPage.CartPage;
 import saucedemo.pages.loginPage.LoginPage;
 import saucedemo.pages.productsPage.ProductsPage;
 import ui.core.Site;
@@ -9,6 +10,7 @@ import ui.core.Site;
 public class SauceDemoSite extends Site<SauceDemoSite> {
 	private LoginPage loginPage;
 	private ProductsPage productsPage;
+	private CartPage cartPage;
 
 	public SauceDemoSite() {
 		super();
@@ -43,4 +45,10 @@ public class SauceDemoSite extends Site<SauceDemoSite> {
 		return productsPage;
 	}
 
+	public CartPage cartPage() {
+		if (cartPage == null) {
+			cartPage = new CartPage(this);
+		}
+		return cartPage;
+	}
 }
