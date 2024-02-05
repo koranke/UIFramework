@@ -18,59 +18,60 @@ public class TestWebTests extends TestBase {
 	@Test
 	public void testHome() {
 		HomePage homePage = new TestWebSite().homePage().goTo();
-		homePage.textBoxWhatever.assertIsNotEnabled();
-		homePage.textBoxEmail.assertIsEnabled();
-		homePage.textBoxEmail.setText("george@outlook.com");
-		homePage.textBoxNumber.typeText("abc");
-		homePage.textBoxNumber.assertText("");
-		homePage.textBoxNumber.typeText("123");
-		homePage.textBoxNumber.assertText("123");
-		homePage.textBoxPassword.setText("asdfgqwert");
-		homePage.textBoxPassword.assertText("asdfgqwert");
-		homePage.buttonSubmit.assertText("Submit");
-		homePage.buttonSubmit.click();
+		homePage.textBoxWhatever().assertIsNotEnabled();
+		homePage.textBoxEmail().assertIsEnabled();
+		homePage.textBoxEmail().setText("george@outlook.com");
+		homePage.textBoxNumber().typeText("abc");
+		homePage.textBoxNumber().assertText("");
+		homePage.textBoxNumber().typeText("123");
+		homePage.textBoxNumber().assertText("123");
+		homePage.textBoxPassword().setText("asdfgqwert");
+		homePage.textBoxPassword().assertText("asdfgqwert");
+		homePage.buttonSubmit().assertText("Submit");
+		homePage.buttonSubmit().click();
 	}
 
 	@Test
 	public void testDemoOne() {
 		DemoOnePage demoOnePage = new TestWebSite().demoOnePage().goTo();
-		demoOnePage.comboBoxStandard.setText(2);
-		demoOnePage.radioButtonOption2.click();
-		demoOnePage.listComplex.checkBoxOption.get(2).click();
-		demoOnePage.comboBoxStandard.assertText("2");
-		demoOnePage.radioButtonOption1.assertIsNotSelected();
-		demoOnePage.radioButtonOption2.assertIsSelected();
-		demoOnePage.listComplex.checkBoxOption.get(2).assertIsSelected();
-		demoOnePage.listComplex.checkBoxOption.get(3).assertIsNotSelected();
+		demoOnePage.comboBoxStandard().setText(2);
+		demoOnePage.radioButtonOption2().click();
+		demoOnePage.listComplex().withRow(2).checkBoxOption().click();
+
+		demoOnePage.comboBoxStandard().assertText("2");
+		demoOnePage.radioButtonOption1().assertIsNotSelected();
+		demoOnePage.radioButtonOption2().assertIsSelected();
+		demoOnePage.listComplex().withRow(2).checkBoxOption().assertIsSelected();
+		demoOnePage.listComplex().withRow(3).checkBoxOption().assertIsNotSelected();
 	}
 
 
 	@Test
 	public void testDemoTwo() {
 		DemoTwoPage demoTwoPage = new TestWebSite().demoTwoPage().goTo();
-		demoTwoPage.tableTwo.checkBoxDoIt.get(2).click();
-		demoTwoPage.tableTwo.comboBoxState.get(2).setText("Retired");
+		demoTwoPage.tableTwo().withRow(2).checkBoxDoIt().click();
+		demoTwoPage.tableTwo().comboBoxState().setText("Retired");
 
-		demoTwoPage.tableTwo.checkBoxDoIt.get(1).assertIsNotSelected();
-		demoTwoPage.tableTwo.comboBoxState.get(1).assertText("Pending");
-		demoTwoPage.tableTwo.checkBoxDoIt.get(2).assertIsSelected();
-		demoTwoPage.tableTwo.comboBoxState.get(2).assertText("Retired");
+		demoTwoPage.tableTwo().withRow(1).checkBoxDoIt().assertIsNotSelected();
+		demoTwoPage.tableTwo().comboBoxState().assertText("Pending");
+		demoTwoPage.tableTwo().withRow(2).checkBoxDoIt().assertIsSelected();
+		demoTwoPage.tableTwo().comboBoxState().assertText("Retired");
 	}
 
 	@Test
 	public void testDemoThree() {
 		DemoThreePage demoThreePage = new TestWebSite().demoThreePage().goTo();
-		PanelDetails panelDetails = demoThreePage.panelDetails;
+		PanelDetails panelDetails = demoThreePage.panelDetails();
 
-		panelDetails.labelTitle.assertIsNotVisible();
-		demoThreePage.buttonViewDetails.click();
-		panelDetails.labelTitle.assertIsVisible();
+		panelDetails.labelTitle().assertIsNotVisible();
+		demoThreePage.buttonViewDetails().click();
+		panelDetails.labelTitle().assertIsVisible();
 
-		panelDetails.labelOne.assertText("One");
-		panelDetails.listCars.labelCar.get(1).assertText("Camry");
-		panelDetails.buttonClose.click();
+		panelDetails.labelOne().assertText("One");
+		panelDetails.listCars().withRow(1).labelCar().assertText("Camry");
+		panelDetails.buttonClose().click();
 
-		panelDetails.labelTitle.assertIsNotVisible();
+		panelDetails.labelTitle().assertIsNotVisible();
 	}
 
 	@DataProvider(name = "ParallelScenarios", parallel = true)
@@ -99,8 +100,8 @@ public class TestWebTests extends TestBase {
 	@Test(dataProvider = "ParallelScenarios")
 	public void testParallelScenarios(String scenario, String number, String expectedValue) {
 		HomePage homePage = new TestWebSite().homePage().goTo();
-		homePage.textBoxNumber.typeText(number);
-		homePage.textBoxNumber.assertText(expectedValue);
+		homePage.textBoxNumber().typeText(number);
+		homePage.textBoxNumber().assertText(expectedValue);
 	}
 }
 

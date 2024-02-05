@@ -7,6 +7,6 @@ public class PanelDetails extends PanelDetailsBase {
 
     public PanelDetails(Page page) {
         super(page);
-        this.buttonClose.setClickDelay(100);
+        this.buttonClose().setClickDelay(100);
     }
 }

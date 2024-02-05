@@ -40,8 +40,8 @@ public class PageGeneratorTests {
     }
 
     public void makeSinglePageForSite() {
-        PageControlModelGenerator.makePage(baseClassPackagePath, demoPage3Url,
-                pageUrlMap.get(demoPage3Url), TargetPortal.TEST_WEB);
+        PageControlModelGenerator.makePage(baseClassPackagePath, homeUrl,
+                pageUrlMap.get(homeUrl), TargetPortal.TEST_WEB);
     }
 
 }

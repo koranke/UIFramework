@@ -8,17 +8,15 @@ import ui.core.enums.TargetPortal;
 import utilities.FileHelper;
 import utilities.Log;
 import utilities.ObjectHelper;
-import utilities.StringHelper;
 import utilities.SystemHelper;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /*
 Class for creating Page Control Object Model classes for UI automation.
@@ -37,15 +35,14 @@ package "tenants", which would contain the files/classes like the following
 pages and panels, along with tables, will never get replaced, as these may contain custom code.
 
  */
-public class PageControlModelGenerator {
+public class PageControlModelGenerator extends GeneratorBase {
     private static final Log log = Log.getInstance();
-    private static final Map<ControlType, String> importMap = getImportMap();
     private static final String coreControlsPath = "ui.core.controls.";
     private static final String sitePathTemplate = "ui.sites.%s";
     private static final String sitePagePathTemplate = "ui.sites.%s.pages.%s";
 
-    private static Map<ControlType, String> getImportMap() {
-        Map<ControlType, String> importMap = new HashMap<>(
+    private static void setImportMap() {
+        importMap = new HashMap<>(
                 Map.of(
                         ControlType.BUTTON, String.format("import %sButton", coreControlsPath),
                         ControlType.COMBOBOX, String.format("import %sComboBox", coreControlsPath),
@@ -60,8 +57,6 @@ public class PageControlModelGenerator {
                 ));
         importMap.put(ControlType.TABLE, "import ui.core.Locator");
         importMap.put(ControlType.LIST, "import ui.core.Locator");
-
-        return importMap;
     }
 
     /**
@@ -72,21 +67,24 @@ public class PageControlModelGenerator {
      * @param targetPortal targetPortal
      */
     public static void makePage(String basePath, String pageUrl, String pageName, TargetPortal targetPortal) {
+        setImportMap();
+
         ClassBuilder classBuilder = new ClassBuilder()
                 .withClassPackageName(getPackageName(targetPortal, pageName))
                 .withImports(getCoreImports(targetPortal))
-                .withClassAnnotations(List.of(getClassAnnotation()))
+                .withClassAnnotations(getClassAnnotations())
                 .withClassName(pageName + "BasePage")
                 .withClassDeclaration(getPageClass(targetPortal, pageName + "BasePage"))
                 ;
 
         Map<ElementType, List<WebElement>> elementMap = getAllTaggedElementsForPage(pageUrl, targetPortal);
         List<WebElement> elements = elementMap.get(ElementType.GENERAL);
+        List<AttributeElement> attributeElements = elements.stream().map(ExtendedElement::new).collect(Collectors.toList());
         List<String> processedElements = new ArrayList<>();
         Map<String, List<String>> comboBoxes = new HashMap<>();
 
         classBuilder.setMemberDeclarations(
-                getClassMemberDeclarationsForElements(elements, processedElements, classBuilder.getImports(), comboBoxes)
+                getClassMemberDeclarationsForElements(attributeElements, processedElements, classBuilder.getImports(), comboBoxes)
         );
 
         classBuilder.getMemberDeclarations().addAll(
@@ -153,18 +151,23 @@ public class PageControlModelGenerator {
                 .withClassPackageName(packageName)
                 .withImports(getCoreListImports())
                 .withClassName(listName)
-                .withClassAnnotations(List.of(getClassAnnotation()))
+                .withClassAnnotations(List.of(getListAnnotation()))
                 .withClassDeclaration(getListClass( listName + "Base"))
                 ;
 
-        classBuilder.withMemberDeclarations(getListClassMemberDeclarationForElement(elements, processedElements, classBuilder.getImports(), comboBoxes));
+        List<AttributeElement> attributeElements = elements.stream().map(ExtendedElement::new).collect(Collectors.toList());
+
+        classBuilder.withMemberDeclarations(getListClassMemberDeclarationForElement(attributeElements, processedElements, classBuilder.getImports(), comboBoxes));
         classBuilder.getMemberDeclarations().addAll(getListComboBoxClassMemberDeclarations(comboBoxes));
 
         classBuilder.setConstructors(
                 List.of(getListConstructor(listName + "Base"))
         );
 
-        classBuilder.setMemberInitializations(getListMemberInitializations(elements, comboBoxes, classBuilder.getImports()));
+        classBuilder.setMemberInitializations(getListMemberInitializations(attributeElements, comboBoxes, classBuilder.getImports()));
+
+        classBuilder.setMethods(getListLabelSearchMethods(listName + "Base", attributeElements));
+        classBuilder.getMethods().addAll(getListMemberAccessorMethods(attributeElements, comboBoxes));
 
         String finalContent = classBuilder.build();
 
@@ -181,12 +184,13 @@ public class PageControlModelGenerator {
                 .withClassPackageName(packageName)
                 .withImports(getCorePanelImports())
                 .withClassName(panelName + "Base")
-                .withClassAnnotations(List.of(getClassAnnotation()))
+                .withClassAnnotations(getClassAnnotations())
                 .withClassDeclaration(getPanelClass(panelName + "Base"))
                 ;
 
+        List<AttributeElement> attributeElements = elements.stream().map(ExtendedElement::new).collect(Collectors.toList());
         List<String> processedElements = new ArrayList<>();
-        classBuilder.withMemberDeclarations(getClassMemberDeclarationsForElements(elements, processedElements, classBuilder.getImports(), comboBoxes));
+        classBuilder.withMemberDeclarations(getClassMemberDeclarationsForElements(attributeElements, processedElements, classBuilder.getImports(), comboBoxes));
         classBuilder.getMemberDeclarations().addAll(getComboBoxClassMemberDeclarations(comboBoxes));
 
         classBuilder.setConstructors(
@@ -426,188 +430,6 @@ public class PageControlModelGenerator {
         return memberInitializations;
     }
 
-    private static List<String> getListMemberInitializations(List<WebElement> elements, Map<String, List<String>> comboBoxes,
-                                    List<String> imports) {
-
-        List<String> memberInitializations = new ArrayList<>();
-        List<String> processedElements = new ArrayList<>();
-
-        for (WebElement element : elements) {
-            String testId = element.getDomAttribute("data-testid");
-            if (processedElements.contains(testId)) {
-                continue;
-            } else {
-                processedElements.add(testId);
-            }
-            ControlType type = getType(testId);
-            String name = getName(testId);
-
-            if (type != ControlType.COMBOBOX) {
-                String content;
-                if (!List.of(ControlType.TABLE, ControlType.LIST, ControlType.PANEL, ControlType.COMBOBOX).contains(type)) {
-                    content = getStandardRepeatingControl(name, testId, type);
-                    memberInitializations.add(content);
-                } else if (type == ControlType.TABLE) {
-                    log.logAssert(false, "Embedded tables not supported.");
-                } else if (type == ControlType.LIST) {
-                    log.logAssert(false, "Embedded lists not supported.");
-                } else if (type == ControlType.PANEL) {
-                    log.logAssert(false, "Embedded panels not supported.");
-                }
-            }
-        }
-
-        for (Map.Entry<String, List<String>> entry : comboBoxes.entrySet()) {
-            String content;
-            if (entry.getValue().size() == 1) {
-                content = getStandardRepeatingControl(entry.getKey(), getFromList(entry.getValue(), "button"),
-                        ControlType.SELECT_COMBOBOX);
-                memberInitializations.add(content);
-
-                updateImportMap(imports, ControlType.SELECT_COMBOBOX);
-            } else {
-                content = String.format("this.%s = new CustomComboBox(\n"
-                                + "\t\t\tpage.getByTestId(\"%s\"),\n"
-                                + "\t\t\tpage.getByTestId(\"%s\"),\n"
-                                + "\t\t\tpage.getByTestId(\"%s\")\n"
-                                + "\t\t)",
-                        entry.getKey(),
-                        getFromList(entry.getValue(), "button"),
-                        getFromList(entry.getValue(), "text"),
-                        getFromList(entry.getValue(), "list"));
-
-                updateImportMap(imports, ControlType.CUSTOM_COMBOBOX);
-                memberInitializations.add(content);
-            }
-        }
-        return memberInitializations;
-    }
-
-    private static String getStandardRepeatingControl(String name, String testId, ControlType type) {
-        return String.format("this.%s = new RepeatingControl<>(\n" +
-                        "\t\t\tlocator,\n" +
-                        "\t\t\t\"%s\",\n" +
-                        "\t\t\tLocatorMethod.DATA_TEST_ID,\n" +
-                        "\t\t\t%s::new,\n" +
-                        "\t\t\trowLocatorPattern,\n" +
-                        "\t\t\thasHeader\n" +
-                        "\t\t)",
-                name, testId, type.getType());
-    }
-
-    private static String getCustomRepeatingControl(String name, String testId, String id2, String id3, String type) {
-        return String.format("this.%s = new RepeatingControl<>(\n" +
-                        "\t\t\tlocator,\n" +
-                        "\t\t\t\"%s\",\n" +
-                        "\t\t\t\"%s\",\n" +
-                        "\t\t\t\"%s\",\n" +
-                        "\t\t\tLocatorMethod.DATA_TEST_ID,\n" +
-                        "\t\t\t%s::new,\n" +
-                        "\t\t\trowLocatorPattern,\n" +
-                        "\t\t\thasHeader\n" +
-                        "\t\t)",
-                name, testId, id2, id3, type);
-    }
-
-    private static List<String> getComboBoxClassMemberDeclarations(Map<String, List<String>> comboBoxes) {
-        List<String> declarations = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : comboBoxes.entrySet()) {
-            declarations.add(String.format("public ComboBox %s", entry.getKey()));
-        }
-        return declarations;
-    }
-
-    private static List<String> getListComboBoxClassMemberDeclarations(Map<String, List<String>> comboBoxes) {
-        List<String> declarations = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : comboBoxes.entrySet()) {
-            declarations.add(String.format("public RepeatingControl<ComboBox> %s", entry.getKey()));
-        }
-        return declarations;
-    }
-
-    private static List<String> getClassMemberDeclarationsForElements(List<WebElement> elements, List<String> processedElements,
-                                            List<String> imports, Map<String, List<String>> comboBoxes) {
-
-        List<String> declarations = new ArrayList<>();
-        for (WebElement element : elements) {
-            String testId = element.getDomAttribute("data-testid");
-            if (processedElements.contains(testId)) {
-                continue;
-            } else {
-                processedElements.add(testId);
-            }
-            ControlType type = getType(testId);
-
-            updateImportMap(imports, type);
-
-            String name = getName(testId);
-            if (type == ControlType.COMBOBOX) {
-                if (comboBoxes.containsKey(name)) {
-                    comboBoxes.get(name).add(testId);
-                } else {
-                    comboBoxes.put(name, Arrays.asList(testId));
-                }
-            } else {
-                String content = "";
-                if (type == ControlType.TABLE) {
-                    String tableTypeName = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    content += String.format("public %s %s", tableTypeName, name);
-                } else if (type == ControlType.PANEL) {
-                    String panelTypeName = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    content += String.format("public %s %s", panelTypeName, name);
-                } else if (type == ControlType.LIST) {
-                    String listTypeName = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    content += String.format("public %s %s", listTypeName, name);
-                } else {
-                    content += String.format("public %s %s", type.getType(), name);
-                }
-                declarations.add(content);
-            }
-        }
-        return declarations;
-    }
-
-    private static List<String> getListClassMemberDeclarationForElement(
-            List<WebElement> elements, List<String> processedElements, List<String> imports, Map<String, List<String>> comboBoxes
-        ) {
-
-        List<String> declarations = new ArrayList<>();
-
-        for (WebElement element : elements) {
-            String testId = element.getDomAttribute("data-testid");
-            if (processedElements.contains(testId)) {
-                continue;
-            } else {
-                processedElements.add(testId);
-            }
-            ControlType type = getType(testId);
-
-            log.logAssert(
-                    importMap.containsKey(type) && !List.of(ControlType.TABLE, ControlType.PANEL, ControlType.LIST).contains(type),
-                    "Unsupported type: " + type
-            );
-            updateImportMap(imports, type);
-
-            String name = getName(testId);
-            if (type == ControlType.COMBOBOX) {
-                if (comboBoxes.containsKey(name)) {
-                    comboBoxes.get(name).add(testId);
-                } else {
-                    comboBoxes.put(name, Arrays.asList(testId));
-                }
-            } else if (type == ControlType.TABLE) {
-                log.logAssert(false, "Embedded tables not supported.");
-            } else if (type == ControlType.PANEL) {
-                log.logAssert(false, "Embedded panels not supported.");
-            } else if (type == ControlType.LIST) {
-                log.logAssert(false, "Embedded lists not supported.");
-            } else {
-                declarations.add(String.format("public RepeatingControl<%s> %s", type.getType(), name));
-            }
-        }
-        return declarations;
-    }
-
     private static Map<ElementType, List<WebElement>> getAllTaggedElementsForPage(String pageUrl, TargetPortal targetPortal) {
 
         Map<ElementType, List<WebElement>> elementMap = new HashMap<>();
@@ -715,20 +537,8 @@ public class PageControlModelGenerator {
         return String.format("package %s;\n\n", packageName);
     }
 
-    private static String getClassAnnotation() {
-        return "@SuppressWarnings({\"checkstyle:AbbreviationAsWordInName\", \"checkstyle:MemberName\", " + "\"checkstyle:LineLength\"})";
-    }
-
     private static String getPageClass(TargetPortal targetPortal, String pageName) {
         return String.format("abstract class %s<T> extends Base%sPage<T>", pageName, targetPortal.getBaseName());
-    }
-
-    private static String getPanelClass(String pageName) {
-        return String.format("abstract class %s extends PanelControl", pageName);
-    }
-
-    private static String getListClass(String pageName) {
-        return String.format("abstract class %s extends ListControl", pageName);
     }
 
     private static List<String> getCoreImports(TargetPortal targetPortal) {
@@ -741,7 +551,9 @@ public class PageControlModelGenerator {
                 List.of(
                         String.format("import %s", basePageImport),
                         String.format("import %s", siteImport),
-                        "import ui.core.ExtendedBy"
+                        "import ui.core.ExtendedBy",
+                        "import lombok.Getter",
+                        "import lombok.experimental.Accessors"
                 )
         );
     }
@@ -751,7 +563,9 @@ public class PageControlModelGenerator {
                 List.of(
                     "import org.openqa.selenium.WebDriver",
                     "import ui.core.ExtendedBy",
-                    "import ui.core.controls.PanelControl"
+                    "import ui.core.controls.PanelControl",
+                    "import lombok.Getter",
+                    "import lombok.experimental.Accessors"
                 )
         );
     }
@@ -766,51 +580,6 @@ public class PageControlModelGenerator {
                         "import ui.core.enums.LocatorMethod"
                 )
         );
-    }
-
-    /*
-    In order for this to work, need to add the following to IntelliJ, Help->Edit custom VM options and restart.
-    -Deditable.java.test.console=true
-     */
-    private static boolean scanAgain() {
-        System.out.println("\n\nScan again for more controls?\nIf yes, expose new controls on page now and then enter 'y'."
-                + "\nOtherwise, press ENTER now.\n");
-        Scanner in = new Scanner(System.in);
-        String userChoice = in.nextLine();
-        return userChoice != null && userChoice.equalsIgnoreCase("y");
-    }
-
-    private static String getFromList(List<String> testIds, String filter) {
-        return testIds.stream().filter(item -> item.endsWith(filter)).findFirst().orElse(null);
-    }
-
-    private static ControlType getType(String attribute) {
-        String type = attribute.split("-")[0];
-        if (type.equals("CheckBox") || type.equals("RadioButton")) {
-            type = "FlagControl";
-        }
-        return ControlType.getForType(type);
-    }
-
-    private static String getName(String attribute) {
-        log.logAssert(attribute.contains("-"), "Bad data-testid: " + attribute);
-        String[] items = attribute.split("-");
-        String name = items[0] + items[1];
-        return name.substring(0, 1).toLowerCase() + name.substring(1);
-    }
-
-    private static String getUpperCaseInitial(String text) {
-        return text.substring(0, 1).toUpperCase() + text.substring(1);
-    }
-
-    private static void updateImportMap(List<String> imports, ControlType controlType) {
-        if (controlType == ControlType.PANEL) return;
-
-        log.logAssert(importMap.containsKey(controlType), "Unsupported type: " + controlType);
-
-        if (!StringHelper.containsString(importMap.get(controlType), imports)) {
-            imports.add(importMap.get(controlType));
-        }
     }
 
 }

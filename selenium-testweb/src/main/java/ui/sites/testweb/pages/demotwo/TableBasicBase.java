@@ -4,21 +4,14 @@ import ui.core.Locator;
 import ui.core.controls.ListControl;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public class TableBasicBase extends ListControl {
+public abstract class TableBasicBase extends ListControl<TableBasicBase> {
 
 
-
-
-    /**
-     * List Constructor.
-     * @param locator locator
-     */
-    public TableBasicBase(Locator locator) {
-        super(locator);
-        this.hasHeader = false;
-        this.rowLocatorPattern = ".//tr";
-    }
-
+	public TableBasicBase(Locator locator) {
+		super(locator);
+		this.hasHeader = false;
+		this.rowLocatorPattern = ".//tbody/tr";
+	}
 
 	protected void initialize() {
 	}

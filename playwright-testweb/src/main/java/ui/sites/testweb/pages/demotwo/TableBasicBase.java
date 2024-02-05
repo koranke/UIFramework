@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import ui.core.controls.ListControl;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public abstract class TableBasicBase extends ListControl {
+public abstract class TableBasicBase extends ListControl<TableBasicBase> {
 
 
 	public TableBasicBase(Locator locator) {

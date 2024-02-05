@@ -8,9 +8,9 @@ import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public abstract class ListComplexBase extends ListControl {
-	public RepeatingControl<FlagControl> checkBoxOption;
-	public RepeatingControl<Label> labelOption;
+public abstract class ListComplexBase extends ListControl<ListComplexBase> {
+	private RepeatingControl<FlagControl> checkBoxOption;
+	private RepeatingControl<Label> labelOption;
 
 
 	public ListComplexBase(Locator locator) {
@@ -38,5 +38,18 @@ public abstract class ListComplexBase extends ListControl {
                 rowLocatorPattern,
                 hasHeader
         );
+	}
+
+	public ListComplexBase usingLabelOption() {
+		this.searchLabel = labelOption;
+		return this;
+	}
+
+	public FlagControl checkBoxOption() {
+		return checkBoxOption.get(currentRow);
+	}
+
+	public Label labelOption() {
+		return labelOption.get(currentRow);
 	}
 }

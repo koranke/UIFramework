@@ -9,9 +9,9 @@ import ui.core.controls.SelectComboBox;
 import ui.core.enums.LocatorMethod;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public abstract class TableTwoBase extends ListControl {
-	public RepeatingControl<FlagControl> checkBoxDoIt;
-	public RepeatingControl<ComboBox> comboBoxState;
+public abstract class TableTwoBase extends ListControl<TableTwoBase> {
+	private RepeatingControl<FlagControl> checkBoxDoIt;
+	private RepeatingControl<ComboBox> comboBoxState;
 
 
 	public TableTwoBase(Locator locator) {
@@ -39,5 +39,13 @@ public abstract class TableTwoBase extends ListControl {
                 rowLocatorPattern,
                 hasHeader
         );
+	}
+
+	public FlagControl checkBoxDoIt() {
+		return checkBoxDoIt.get(currentRow);
+	}
+
+	public ComboBox comboBoxState() {
+		return comboBoxState.get(currentRow);
 	}
 }

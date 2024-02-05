@@ -1,5 +1,7 @@
 package ui.sites.testweb.pages.demothree;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.openqa.selenium.WebDriver;
 import ui.core.ExtendedBy;
 import ui.core.Locator;
@@ -8,21 +10,24 @@ import ui.core.controls.Label;
 import ui.core.controls.PanelControl;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
+@Getter
+@Accessors(fluent = true)
 public abstract class PanelDetailsBase extends PanelControl {
-	public Label labelTitle;
-	public Button buttonX;
-	public Label labelMessage;
-	public Label labelOne;
-	public Label labelTwo;
-	public Label labelThree;
-	public ListCars listCars;
-	public Button buttonClose;
+	private Label labelTitle;
+	private Button buttonX;
+	private Label labelMessage;
+	private Label labelOne;
+	private Label labelTwo;
+	private Label labelThree;
+	private ListCars listCars;
+	private Button buttonClose;
 
 
-public PanelDetailsBase(WebDriver webDriver) {
+	public PanelDetailsBase(WebDriver webDriver) {
 		this.webDriver = webDriver;
 		initialize();
 	}
+
 	protected void initialize() {
 		this.labelTitle = new Label(webDriver, ExtendedBy.testId("Label-Title"));
 		this.buttonX = new Button(webDriver, ExtendedBy.testId("Button-X"));

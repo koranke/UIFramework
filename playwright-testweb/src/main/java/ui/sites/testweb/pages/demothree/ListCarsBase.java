@@ -7,8 +7,8 @@ import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public abstract class ListCarsBase extends ListControl {
-	public RepeatingControl<Label> labelCar;
+public abstract class ListCarsBase extends ListControl<ListCarsBase> {
+	private RepeatingControl<Label> labelCar;
 
 
 	public ListCarsBase(Locator locator) {
@@ -21,11 +21,20 @@ public abstract class ListCarsBase extends ListControl {
 		
         this.labelCar = new RepeatingControl<>(
                 locator,
-                "Label-Car",
+                null,
                 LocatorMethod.DATA_TEST_ID,
                 Label::new,
                 rowLocatorPattern,
                 hasHeader
         );
+	}
+
+	public ListCarsBase usingLabelCar() {
+		this.searchLabel = labelCar;
+		return this;
+	}
+
+	public Label labelCar() {
+		return labelCar.get(currentRow);
 	}
 }

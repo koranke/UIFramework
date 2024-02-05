@@ -27,14 +27,14 @@ public class TestWebSite extends Site<TestWebSite> {
 		baseUrl = TestWebConstants.baseUrl;
 	}
 
-	public HomePage getHomePage() {
+	public HomePage homePage() {
 		if (homePage == null) {
 			homePage = new HomePage(this);
 		}
 		return homePage;
 	}
 
-	public DemoOnePage getDemoOnePage() {
+	public DemoOnePage demoOnePage() {
 		if (demoOnePage == null) {
 			demoOnePage = new DemoOnePage(this);
 		}

@@ -7,8 +7,8 @@ import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
-public abstract class TableOneBase extends ListControl {
-	public RepeatingControl<FlagControl> checkBoxDoIt;
+public abstract class TableOneBase extends ListControl<TableOneBase> {
+	private RepeatingControl<FlagControl> checkBoxDoIt;
 
 
 	public TableOneBase(Locator locator) {
@@ -27,5 +27,9 @@ public abstract class TableOneBase extends ListControl {
                 rowLocatorPattern,
                 hasHeader
         );
+	}
+
+	public FlagControl checkBoxDoIt() {
+		return checkBoxDoIt.get(currentRow);
 	}
 }

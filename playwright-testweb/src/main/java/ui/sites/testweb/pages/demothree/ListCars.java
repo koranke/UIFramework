@@ -9,6 +9,8 @@ public class ListCars extends ListCarsBase {
         super(locator);
         //Add any overrides here.  Method "initialize" must be called last.
         this.initialize();
-        this.labelCar.setControlId(null);
+
+        //TODO: we need a way to set control id to null.  Old method no longer works.
+//        this.labelCar().setControlId(null);
     }
 }

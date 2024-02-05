@@ -2,7 +2,6 @@ package saucedemo.pages.cartPage;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.openqa.selenium.By;
 import saucedemo.SauceDemoSite;
 import saucedemo.pages.BaseSauceDemoPage;
 import ui.core.controls.Button;

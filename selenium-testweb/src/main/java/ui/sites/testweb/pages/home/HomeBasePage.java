@@ -1,5 +1,7 @@
 package ui.sites.testweb.pages.home;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import ui.core.ExtendedBy;
 import ui.core.controls.Button;
 import ui.core.controls.Label;
@@ -8,24 +10,26 @@ import ui.sites.testweb.TestWebSite;
 import ui.sites.testweb.pages.BaseTestWebPage;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
+@Getter
+@Accessors(fluent = true)
 public abstract class HomeBasePage<T> extends BaseTestWebPage<T> {
-	public Label labelSomeText;
-	public TextBox textBoxWhatever;
-	public Label labelEmail;
-	public TextBox textBoxEmail;
-	public Label labelNumber;
-	public TextBox textBoxNumber;
-	public Label labelDate;
-	public TextBox textBoxDate;
-	public Label labelPhone;
-	public TextBox textBoxPhone;
-	public Label labelMessage;
-	public TextBox textBoxMessage;
-	public Label labelPassword;
-	public TextBox textBoxPassword;
-	public Label labelPasswordInstructions;
-	public Button buttonSubmit;
-	public Button buttonReset;
+	private Label labelSomeText;
+	private TextBox textBoxWhatever;
+	private Label labelEmail;
+	private TextBox textBoxEmail;
+	private Label labelNumber;
+	private TextBox textBoxNumber;
+	private Label labelDate;
+	private TextBox textBoxDate;
+	private Label labelPhone;
+	private TextBox textBoxPhone;
+	private Label labelMessage;
+	private TextBox textBoxMessage;
+	private Label labelPassword;
+	private TextBox textBoxPassword;
+	private Label labelPasswordInstructions;
+	private Button buttonSubmit;
+	private Button buttonReset;
 
 
 	public HomeBasePage(TestWebSite portal) {

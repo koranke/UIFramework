@@ -1,13 +1,17 @@
 package ui.sites.testweb.pages.demotwo;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import ui.sites.testweb.TestWebSite;
 import ui.sites.testweb.pages.BaseTestWebPage;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
+@Getter
+@Accessors(fluent = true)
 public abstract class DemoTwoBasePage<T> extends BaseTestWebPage<T> {
-	public TableBasic tableBasic;
-	public TableOne tableOne;
-	public TableTwo tableTwo;
+	private TableBasic tableBasic;
+	private TableOne tableOne;
+	private TableTwo tableTwo;
 
 
 	public DemoTwoBasePage(TestWebSite portal) {

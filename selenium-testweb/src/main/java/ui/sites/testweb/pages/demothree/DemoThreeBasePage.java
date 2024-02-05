@@ -1,14 +1,18 @@
 package ui.sites.testweb.pages.demothree;
 
-import ui.sites.testweb.TestWebSite;
-import ui.sites.testweb.pages.BaseTestWebPage;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import ui.core.ExtendedBy;
 import ui.core.controls.Button;
+import ui.sites.testweb.TestWebSite;
+import ui.sites.testweb.pages.BaseTestWebPage;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
+@Getter
+@Accessors(fluent = true)
 public abstract class DemoThreeBasePage<T> extends BaseTestWebPage<T> {
-	public Button buttonViewDetails;
-	public PanelDetails panelDetails;
+	private Button buttonViewDetails;
+	private PanelDetails panelDetails;
 
 
 	public DemoThreeBasePage(TestWebSite portal) {

@@ -1,5 +1,7 @@
 package ui.sites.testweb.pages.demoone;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import ui.core.controls.ComboBox;
 import ui.core.controls.FlagControl;
 import ui.core.controls.SelectComboBox;
@@ -7,15 +9,17 @@ import ui.sites.testweb.TestWebSite;
 import ui.sites.testweb.pages.BaseTestWebPage;
 
 @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName", "checkstyle:LineLength"})
+@Getter
+@Accessors(fluent = true)
 public abstract class DemoOneBasePage<T> extends BaseTestWebPage<T> {
-	public FlagControl checkBoxDefault;
-	public FlagControl checkBoxOther;
-	public FlagControl radioButtonOption1;
-	public FlagControl radioButtonOption2;
-	public ListOne listOne;
-	public ListTwo listTwo;
-	public ListComplex listComplex;
-	public ComboBox comboBoxStandard;
+	private FlagControl checkBoxDefault;
+	private FlagControl checkBoxOther;
+	private FlagControl radioButtonOption1;
+	private FlagControl radioButtonOption2;
+	private ListOne listOne;
+	private ListTwo listTwo;
+	private ListComplex listComplex;
+	private ComboBox comboBoxStandard;
 
 
 	public DemoOneBasePage(TestWebSite portal) {

@@ -2,6 +2,7 @@ package ui.sites.testweb.pages.demothree;
 
 import ui.core.Locator;
 
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class ListCars extends ListCarsBase {
 
     public ListCars(Locator locator) {
