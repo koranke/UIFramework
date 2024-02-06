@@ -1,4 +1,31 @@
 # UI Automation Framework
+
+<!-- TOC -->
+* [UI Automation Framework](#ui-automation-framework)
+  * [Features](#features)
+  * [Project Structure](#project-structure)
+    * [Core](#core)
+    * [Playwright](#playwright)
+    * [Selenium](#selenium)
+    * [Playwright-swaglabs / Selenium-swaglabs](#playwright-swaglabs--selenium-swaglabs)
+    * [Playwright-testweb / Selenium-testweb](#playwright-testweb--selenium-testweb)
+  * [Getting Started](#getting-started)
+  * [Examples](#examples)
+  * [Components](#components)
+    * [Page Class](#page-class)
+    * [Panel Class](#panel-class)
+    * [Repeating Elements in Lists and Tables](#repeating-elements-in-lists-and-tables)
+    * [Site Class](#site-class)
+  * [Page Control Object Model Generator](#page-control-object-model-generator)
+  * [Using the UI framework](#using-the-ui-framework)
+    * [Creating Model Classes](#creating-model-classes)
+    * [Handling repeating Elements](#handling-repeating-elements)
+      * [Step One](#step-one)
+      * [Step Two](#step-two)
+      * [Step Three](#step-three)
+    * [Creating Tests](#creating-tests)
+<!-- TOC -->
+
 The goal of this framework is to make tests as easy to write as possible, minimizing test complexity and cost of maintenance.
 It uses a Page Control Object Model (PCOM) approach for automation.  This involves modeling a web page 
 through a series of classes, which represent the web page and any child dialogs ("panels"), tables and lists. It also 
@@ -13,12 +40,12 @@ libraries.  There are two versions, one for Selenium and one for Playwright.  Fr
 
 ## Features
 * Easily discoverable and easy to code, thanks to auto-completion in the IDE.  Standard line in a test follows the pattern
-```website.pagex().controlx.actionx()``` or ```website.pagex().actionx()```. After each dot, IDE code completion will display the available options. 
+```website.pagex().controlx().actionx()``` or ```website.pagex().actionx()```. After each dot, IDE code completion will display the available options. 
 For example, what pages are available for the website, what controls are available for a page, what actions are available for a 
 particular page or control?
 * Automatic logging of test activity and automatic log rotation between test runs.
 * Automatic screenshots on a test failure.
-* Built-in asserts for controls like textboxes, etc.  For example, ```welcomePage.textBoxName.assertText("George")```.
+* Built-in asserts for controls like textboxes, etc.  For example, ```welcomePage.textBoxName().assertText("George")```.
 * Built-in visual asserts.  For example, ```homepage.assertScreenshot()```.  Configurable to permit some pixel differences.
 Also supports masking (hiding) some controls on a page so that they are not included in the screenshot comparison. 
 * Configurable through a properties file, optionally for different environments, and also supports overrides through
@@ -26,7 +53,7 @@ environment variables.  Allows for setting things like target browser and headle
 * Built-in "slow time" feature ("slowmo" feature from Playwright) for both Playwright and Selenium to aid in debugging.
 * Built-in support for running tests in parallel.
 * Built-in support for initializing and cleaning up Playwright or Selenium resources.
-* Easily interact with repeating elements.  For example, ```productsPage.listProducts.labelPrice.get(2).assertText("12.50")"```
+* Easily interact with repeating elements.  For example, ```productsPage.listProducts().usingRow(2).labelPrice().assertText("12.50")"```
 
 ## Project Structure
 
@@ -64,11 +91,11 @@ Once the site and related page classes have been coded, you can start writing te
 ```java
     public void testNumericTextBox() {
             HomePage homePage = new TestWebSite().homePage().goTo();
-            homePage.textBoxNumber.assertIsEnabled();
-            homePage.textBoxNumber.typeText("abc");
-            homePage.textBoxNumber.assertText("");
-            homePage.textBoxNumber.typeText("123");
-            homePage.textBoxNumber.assertText("123");
+            homePage.textBoxNumber().assertIsEnabled();
+            homePage.textBoxNumber().typeText("abc");
+            homePage.textBoxNumber().assertText("");
+            homePage.textBoxNumber().typeText("123");
+            homePage.textBoxNumber().assertText("123");
         }
 ```
 
@@ -90,6 +117,7 @@ initialized in the constructor.  Use the defined core "control" classes for the 
 Some pages may contain modal dialogs that can be displayed.  A "panel" class models the content of a modal dialog
 separate from the "page" class so that tests can more accurately reflect the structure of a page.  Panel classes should
 be used for any group of controls that can be displayed and hidden together, but where the parent page URL does not change.
+Additionally, panel classes can be used to help break up large, complex pages into more manageable sections.
 
 ### Repeating Elements in Lists and Tables
 A repeating element is where an element can appear multiple times (for example, in a list or table) and where each instance 
@@ -189,6 +217,8 @@ target page that extends from the base website page.  This is where we define al
 add any custom helper methods for the page. For example...
 
 ```java
+@Getter
+@Accessors(fluent = true)
 public class LoginPage extends BaseSauceDemoPage<LoginPage> {
 
      public LoginPage(SauceDemoSite site) {
@@ -201,8 +231,10 @@ and endpoint are the same, use "".
 
 5. Add declarations for any core controls and initialize each in the constructor.  For example...
 ```java
+@Getter
+@Accessors(fluent = true)
 public class LoginPage extends BaseSauceDemoPage<LoginPage> {
-     public TextBox textBoxUserName;
+     private TextBox textBoxUserName;
 
      public LoginPage(SauceDemoSite site) {
           super(site, "");
@@ -227,6 +259,110 @@ public class MyCustomControl extends BaseControl {
 }
 
 ```
+
+### Handling repeating Elements
+Web pages will often have repeating elements, especially pages that display dynamic content.  It could be a list of messages, 
+products, or other records from a database.  Structurally, these repeating elements could be arranged as part of an 
+HTML list or table, but they could also be arranged in a custom manner using DIV elements, for example.  They could be
+arranged horizontally or vertically, or even wrapping into multiple columns.
+
+If the content is static, you have the option to treat each item or group of items in the list as unique controls.  For example,
+label1, label2, etc.  However, if the content is dynamic, such that we could have 0 rows up to 20 rows, then repeating elements are needed.
+
+#### Step One
+Create a class in the "page" package called XxxList that extends from ListControl.  For example...
+
+```java
+public class ListProducts extends ListControl<ListProducts> {
+
+	public ListProducts(Locator locator) {
+		super(locator);
+		this.hasHeader = false;
+		this.rowLocatorPattern = "//div[@class='inventory_item']";
+
+	}
+}
+```
+
+#### Step Two
+Identify all page elements of interest in a single "row" and note their references.  For each, create a new private repeating
+element member and initialize it in the constructor.  For example...
+
+```java
+public class ListProducts extends ListControl<ListProducts> {
+	private final RepeatingControl<Label> labelName;
+	private final RepeatingControl<Button> buttonAddToCart;
+
+	public ListProducts(Locator locator) {
+		super(locator);
+		this.hasHeader = false;
+		this.rowLocatorPattern = "//div[@class='inventory_item']";
+
+		labelName = new RepeatingControl<>(
+				locator,
+				"//div[@class='inventory_item_name ']",
+				LocatorMethod.XPATH,
+				Label::new,
+				rowLocatorPattern,
+				hasHeader
+		);
+		buttonAddToCart = new RepeatingControl<>(
+				locator, "Add to cart",
+				LocatorMethod.TEXT,
+				Button::new,
+				rowLocatorPattern,
+				hasHeader
+		);
+	}
+}
+```
+
+#### Step Three
+Finally, add a "using" method for all "label" controls and add a "getter" method for all controls.  For example...
+
+```java
+public class ListProducts extends ListControl<ListProducts> {
+	private final RepeatingControl<Label> labelName;
+	private final RepeatingControl<Button> buttonAddToCart;
+
+	public ListProducts(Locator locator) {
+		super(locator);
+		this.hasHeader = false;
+		this.rowLocatorPattern = "//div[@class='inventory_item']";
+
+		labelName = new RepeatingControl<>(
+				locator,
+				"//div[@class='inventory_item_name ']",
+				LocatorMethod.XPATH,
+				Label::new,
+				rowLocatorPattern,
+				hasHeader
+		);
+		buttonAddToCart = new RepeatingControl<>(
+				locator, "Add to cart",
+				LocatorMethod.TEXT,
+				Button::new,
+				rowLocatorPattern,
+				hasHeader
+		);
+	}
+
+	public ListProducts usingLabelName() {
+		this.searchLabel = labelName;
+		return this;
+	}
+
+	public Label labelName() {
+		return labelName.get(currentRow);
+	}
+
+	public Button buttonAddToCart() {
+		return buttonAddToCart.get(currentRow);
+	}
+}
+```
+
+
 
 ### Creating Tests
 All tests need to create an instance of the desired website in order to interact with web pages.  The website
