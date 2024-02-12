@@ -74,6 +74,23 @@ public class TestWebTests extends TestBase {
 		panelDetails.labelTitle().assertIsNotVisible();
 	}
 
+	@Test(enabled = false)
+	public void testScreenShotOnFailure() {
+		HomePage homePage = new TestWebSite().homePage().goTo();
+		homePage.textBoxNumber().typeText("abc");
+		homePage.textBoxNumber().assertText("abc");
+		homePage.buttonSubmit().click();
+	}
+
+	@Test
+	public void testTracingOnDemand() {
+		HomePage homePage = new TestWebSite().enableTracing().homePage().goTo();
+		homePage.textBoxNumber().typeText("abc");
+		homePage.textBoxNumber().assertText("");
+		homePage.buttonSubmit().click();
+	}
+
+
 	@DataProvider(name = "ParallelScenarios", parallel = true)
 	public Object[][] getParallelScenarios() {
 		List<Object[]> data = new ArrayList<>();
