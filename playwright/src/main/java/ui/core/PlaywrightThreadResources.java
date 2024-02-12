@@ -12,4 +12,5 @@ public class PlaywrightThreadResources {
     private Browser browser;
     private BrowserContext browserContext;
     private Page page;
+    private boolean tracingIsOn;
 }

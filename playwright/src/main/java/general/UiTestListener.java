@@ -33,6 +33,10 @@ public class UiTestListener extends TestListenerAdapter {
                             .setPath(Path.of(FrameworkConstants.imagesPathErrors + fileName))
             );
         }
+
+        if (PlaywrightManager.tracingIsOn()) {
+            PlaywrightManager.saveTracing(getCombinedTestName(result));
+        }
     }
 
     @Override
@@ -49,6 +53,15 @@ public class UiTestListener extends TestListenerAdapter {
     public void onTestSuccess(ITestResult result) {
         long time = result.getEndMillis() - result.getStartMillis();
         log.info(String.format("Execution time for test [%s]: %d ms", result.getName(), time));
+
+        if (PlaywrightManager.tracingIsOn()) {
+            PlaywrightManager.saveTracing(getCombinedTestName(result));
+        }
+
         PlaywrightManager.closeCurrentPage();
+    }
+
+    private String getCombinedTestName(ITestResult result) {
+        return String.format("%s.%s", result.getInstanceName(), result.getName());
     }
 }

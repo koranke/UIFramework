@@ -7,9 +7,6 @@ import enums.TargetBrowser;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.nio.file.Paths;
-import java.time.Instant;
-
 public abstract class Site<T> {
     public String baseUrl;
     public Page page;
@@ -46,19 +43,7 @@ public abstract class Site<T> {
                         .setSnapshots(true)
                         .setSources(true)
         );
+        PlaywrightManager.flagTracingOn();
         return (T) this;
     }
-
-    /**
-     * Save Tracing.  View at <a href="https://trace.playwright.dev/">...</a>
-     * @return Site
-     */
-    public T saveTracing() {
-        this.page.context().tracing().stop(
-                new Tracing.StopOptions()
-                        .setPath(Paths.get(String.format("traces/trace_%d.zip", Instant.now().getEpochSecond())))
-        );
-        return (T) this;
-    }
-
 }

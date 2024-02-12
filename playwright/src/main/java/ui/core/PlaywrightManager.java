@@ -4,6 +4,8 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Tracing;
+import configuration.FrameworkConstants;
 import configuration.Props;
 import enums.TargetBrowser;
 import lombok.Getter;
@@ -12,9 +14,12 @@ import org.aeonbits.owner.ConfigCache;
 import utilities.Log;
 
 import java.awt.*;
+import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlaywrightManager {
     private static final Props props = ConfigCache.getOrCreate(Props.class);
@@ -131,6 +136,33 @@ public class PlaywrightManager {
                 log.logAssert(false, String.format("Unsupported browser: %s.", targetBrowser.name()));
         }
         resources.setBrowser(browser);
+    }
+
+    public static void flagTracingOn() {
+        if (resourcesMap.get(Thread.currentThread().threadId()) != null) {
+            resourcesMap.get(Thread.currentThread().threadId()).setTracingIsOn(true);
+        }
+    }
+
+    public static boolean tracingIsOn() {
+        if (resourcesMap.get(Thread.currentThread().threadId()) == null) {
+            return false;
+        }
+        return resourcesMap.get(Thread.currentThread().threadId()).isTracingIsOn();
+    }
+
+    /**
+     * Save Tracing.  View at <a href="https://trace.playwright.dev/">...</a>
+     */
+    public static void saveTracing(String testName) {
+        if (resourcesMap.get(Thread.currentThread().threadId()) != null) {
+            resourcesMap.get(Thread.currentThread().threadId()).setTracingIsOn(false);
+        }
+        Objects.requireNonNull(getCurrentPage()).context().tracing().stop(
+                new Tracing.StopOptions()
+                        .setPath(Paths.get(String.format("%s%s_%d.zip",
+                                FrameworkConstants.tracesPath, testName, Instant.now().getEpochSecond())))
+        );
     }
 
 }
