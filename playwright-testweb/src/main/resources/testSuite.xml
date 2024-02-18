@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="TestWeb" parallel="methods" thread-count="4" verbose="1" data-provider-thread-count="4">
+    <test name="Core">
+        <classes>
+            <class name="testweb.TestWebTests" />
+        </classes>
+    </test>
+</suite>
