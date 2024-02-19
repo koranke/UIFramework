@@ -47,6 +47,40 @@
             </div>
         </div>
     </div>
+
+    <button onclick="handleAlert()" data-testid="Button-Alert" id="buttonAlert" type="button" class="btn btn-primary">Alert</button>
+    <script>
+        function handleAlert() {
+          alert("Hello!");
+        }
+    </script>
+
+    <button onclick="handleConfirm()" data-testid="Button-Confirm" id="buttonConfirm" type="button" class="btn btn-primary">Confirm</button>
+    <script>
+        function handleConfirm() {
+          let choice = confirm("Make a choice!");
+          if (choice == true) {
+            document.querySelector('[id="choice"]').innerHTML = "You pressed OK!";
+          } else {
+            document.querySelector('[id="choice"]').innerHTML = "You pressed Cancel!";
+          }
+        }
+    </script>
+    <label data-testid="Label-Choice" id="choice" ></label>
+
+    <button onclick="handlePrompt()" data-testid="Button-Prompt" id="buttonPrompt" type="button" class="btn btn-primary">Prompt</button>
+    <script>
+        function handlePrompt() {
+          let answer = prompt("Tell me something!");
+          if (answer != null) {
+            document.querySelector('[id="answer"]').innerHTML = answer;
+          } else {
+            document.querySelector('[id="answer"]').innerHTML = "";
+          }
+        }
+    </script>
+    <label data-testid="Label-Answer" id="answer" ></label>
+
 </div>
 </body>
 </html>

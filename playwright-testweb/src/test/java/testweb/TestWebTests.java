@@ -74,6 +74,30 @@ public class TestWebTests extends TestBase {
 		panelDetails.labelTitle().assertIsNotVisible();
 	}
 
+	@Test
+	public void testDemoThreeTraditionalDialogs() {
+		DemoThreePage demoThreePage = new TestWebSite().demoThreePage().goTo();
+
+		demoThreePage.buttonAlert()
+				.withAlertAssert("Hello!")
+				.click();
+
+		demoThreePage.buttonConfirm()
+				.withConfirmAssert("Make a choice!")
+				.click();
+		demoThreePage.labelChoice().assertText("You pressed OK!");
+
+		demoThreePage.buttonConfirm()
+				.withConfirmCancelAssert("Make a choice!")
+				.click();
+		demoThreePage.labelChoice().assertText("You pressed Cancel!");
+
+		demoThreePage.buttonPrompt()
+				.withPromptAssert("Tell me something!", "George")
+				.click();
+		demoThreePage.labelAnswer().assertText("George");
+	}
+
 	@Test(enabled = false)
 	public void testScreenShotOnFailure() {
 		HomePage homePage = new TestWebSite().homePage().goTo();

@@ -1,6 +1,5 @@
 package ui.sites.testweb.pages.demothree;
 
-
 import ui.sites.testweb.TestWebSite;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
