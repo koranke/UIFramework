@@ -75,6 +75,26 @@ public class TestWebTests extends TestBase {
 		panelDetails.labelTitle().assertIsNotVisible();
 	}
 
+	@Test
+	public void testDemoThreeTraditionalDialogs() {
+		DemoThreePage demoThreePage = new TestWebSite().demoThreePage().goTo();
+
+		demoThreePage.buttonAlert().click();
+		demoThreePage.assertAlert("Hello!");
+
+		demoThreePage.buttonConfirm().click();
+		demoThreePage.assertAlert("Make a choice!");
+		demoThreePage.labelChoice().assertText("You pressed OK!");
+
+		demoThreePage.buttonConfirm().click();
+		demoThreePage.assertConfirmCancel("Make a choice!");
+		demoThreePage.labelChoice().assertText("You pressed Cancel!");
+
+		demoThreePage.buttonPrompt().click();
+		demoThreePage.assertPrompt("Tell me something!", "George");
+		demoThreePage.labelAnswer().assertText("George");
+	}
+
 	@DataProvider(name = "ParallelScenarios", parallel = true)
 	public Object[][] getParallelScenarios() {
 		List<Object[]> data = new ArrayList<>();

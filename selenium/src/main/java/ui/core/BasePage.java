@@ -3,6 +3,7 @@ package ui.core;
 import configuration.Props;
 import lombok.Getter;
 import org.aeonbits.owner.ConfigCache;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -147,5 +148,30 @@ public abstract class BasePage<T> {
 
 	private String getImageDiffNameFromClass() {
 		return this.getClass().getSimpleName() + "Diff.png";
+	}
+
+	public void assertAlert(String expectedMessage) {
+		Alert alert = new WebDriverWait(getWebDriver(), Duration.ofSeconds(5))
+				.until(ExpectedConditions.alertIsPresent());
+
+		Assert.assertEquals(alert.getText(), expectedMessage);
+		alert.accept();
+	}
+
+	public void assertConfirmCancel(String expectedMessage) {
+		Alert alert = new WebDriverWait(getWebDriver(), Duration.ofSeconds(5))
+				.until(ExpectedConditions.alertIsPresent());
+
+		Assert.assertEquals(alert.getText(), expectedMessage);
+		alert.dismiss();
+	}
+
+	public void assertPrompt(String expectedMessage, String response) {
+		Alert alert = new WebDriverWait(getWebDriver(), Duration.ofSeconds(5))
+				.until(ExpectedConditions.alertIsPresent());
+
+		Assert.assertEquals(alert.getText(), expectedMessage);
+		alert.sendKeys(response);
+		alert.accept();
 	}
 }
