@@ -385,8 +385,8 @@ expose an "assertText" method.  Example test...
           homePage.textBoxNumber().assertIsEnabled();
           homePage.textBoxNumber().typeText("123");
           homePage.textBoxNumber().assertText("123");
-		  homePage.comboBoxColors().selectOption("Blue");
-		  homePage.buttonSubmit().click();
+          homePage.comboBoxColors().selectOption("Blue");
+          homePage.buttonSubmit().click();
      }
 ```
 
@@ -399,10 +399,10 @@ Example...
           LoginPage loginPage = website.loginPage().goTo();
           loginPage.textBoxUser().typeText("Joe");
           loginPage.textBoxPassword().typeText("123");
-		  loginPage.buttonLogin().click();  //this takes user to home page.
+          loginPage.buttonLogin().click();  //this takes user to home page.
 		  
           HomePage homePage = website.homePage();
-		  homePage.textBoxNumber().typeText("123");
+          homePage.textBoxNumber().typeText("123");
      }
 ```
 
@@ -414,8 +414,8 @@ repeating element.  Example...
           HomePage homePage = new TestWebSite().homePage().goTo();
           homePage.listProducts().usingRow(2).labelPrice().assertText("12.50");
 
-		  homePage.tableOrders().assertRowCount(5);
-		  homePage.tableOrders().usingRow(2).buttonRemove().click();
-		  homePage.tableOrders().assertRowCount(4);
+          homePage.tableOrders().assertRowCount(5);
+          homePage.tableOrders().usingRow(2).buttonRemove().click();
+          homePage.tableOrders().assertRowCount(4);
      }
 ```
