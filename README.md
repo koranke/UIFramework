@@ -110,7 +110,7 @@ html pages through a local web server so that they can be accessed through http:
 
 ### Page Class
 The simplest model is of a page with only core, non-repeating elements (see below for details on repeating elements).
-In this case, a single class is needed to model the page.  All elements should be declared as public members and 
+In this case, a single class is needed to model the page.  All elements should be declared as private members and 
 initialized in the constructor.  Use the defined core "control" classes for the different elements.
 
 ### Panel Class
@@ -121,7 +121,7 @@ Additionally, panel classes can be used to help break up large, complex pages in
 
 ### Repeating Elements in Lists and Tables
 A repeating element is where an element can appear multiple times (for example, in a list or table) and where each instance 
-of the element has the same id.  Typically, this is the case with dynamic content.  For example, a list of products 
+of the element has the same test element reference.  Typically, this is the case with dynamic content.  For example, a list of products 
 where the products are loaded from a database.
 
 ### Site Class
@@ -372,5 +372,50 @@ web pages and their controls.  Example test...
 ```java
      public void testSomething() {
           HomePage homePage = new TestWebSite().homePage().goTo();
+     }
+```
+
+All controls only expose methods that they support.  For example, a button control will not expose a "typeText" method.
+Controls, where applicable, will also expose methods for asserting the control state.  For example, a textbox control will
+expose an "assertText" method.  Example test...
+
+```java
+     public void testSomething() {
+          HomePage homePage = new TestWebSite().homePage().goTo();
+          homePage.textBoxNumber().assertIsEnabled();
+          homePage.textBoxNumber().typeText("123");
+          homePage.textBoxNumber().assertText("123");
+		  homePage.comboBoxColors().selectOption("Blue");
+		  homePage.buttonSubmit().click();
+     }
+```
+
+If a test needs to work with multiple pages, then the website class can be used to reference the desired pages.  
+Example...
+
+```java
+     public void testSomething() {
+          TestWebSite website = new TestWebSite();
+          LoginPage loginPage = website.loginPage().goTo();
+          loginPage.textBoxUser().typeText("Joe");
+          loginPage.textBoxPassword().typeText("123");
+		  loginPage.buttonLogin().click();  //this takes user to home page.
+		  
+          HomePage homePage = website.homePage();
+		  homePage.textBoxNumber().typeText("123");
+     }
+```
+
+If a test needs to work with repeating elements, then the list or table control can be used to reference the desired
+repeating element.  Example...
+
+```java
+     public void testSomething() {
+          HomePage homePage = new TestWebSite().homePage().goTo();
+          homePage.listProducts().usingRow(2).labelPrice().assertText("12.50");
+
+		  homePage.tableOrders().assertRowCount(5);
+		  homePage.tableOrders().usingRow(2).buttonRemove().click();
+		  homePage.tableOrders().assertRowCount(4);
      }
 ```
