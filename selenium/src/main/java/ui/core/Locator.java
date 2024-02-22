@@ -92,6 +92,9 @@ public class Locator {
 	}
 
 	public List<WebElement> all() {
+		if (parentElement != null) {
+			return parentElement.findElements(by);
+		}
 		return getWebDriver().findElements(by);
 	}
 

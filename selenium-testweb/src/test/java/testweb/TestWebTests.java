@@ -1,6 +1,7 @@
 package testweb;
 
 import general.TestBase;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ui.sites.testweb.TestWebSite;
@@ -73,6 +74,20 @@ public class TestWebTests extends TestBase {
 		panelDetails.buttonClose().click();
 
 		panelDetails.labelTitle().assertIsNotVisible();
+	}
+
+	@Test
+	public void testPagination() {
+		DemoThreePage demoThreePage = new TestWebSite().demoThreePage().goTo();
+
+		List<Integer> pages = demoThreePage.paginationControl().getPages();
+		Assert.assertEquals(pages.size(), 3);
+		Assert.assertEquals(pages.getFirst().intValue(), 1);
+		Assert.assertEquals(pages.getLast().intValue(), 3);
+
+		demoThreePage.paginationControl().clickPage(2);
+		demoThreePage.paginationControl().buttonNext().click();
+		demoThreePage.paginationControl().buttonPrior().click();
 	}
 
 	@Test
