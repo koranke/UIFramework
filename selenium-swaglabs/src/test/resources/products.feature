@@ -25,3 +25,9 @@ Feature: Products page with search functionality
     And I have added a product to the cart
     When I add another product to the cart
     Then I should see 2 items in the cart
+
+  Scenario: Remove a product from the cart
+    Given I am on the products page
+    And I have added a product to the cart
+    When I remove a product from the cart
+    Then I should see no items in the cart

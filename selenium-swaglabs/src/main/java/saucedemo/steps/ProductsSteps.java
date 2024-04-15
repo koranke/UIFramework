@@ -77,4 +77,14 @@ public class ProductsSteps {
 	public void iAddAProductToTheCart() {
 		site.productsPage().listProducts().withRow(productIndex++).buttonAddToCart().click();
 	}
+
+	@When("I remove a product from the cart")
+	public void iRemoveAProductFromTheCart() {
+		site.productsPage().listProducts().withRow(--productIndex).buttonRemoveFromCart().click();
+	}
+
+	@Then("I should see no items in the cart")
+	public void iShouldSeeNoItemsInTheCart() {
+		site.productsPage().labelCartCount().assertIsNotVisible();
+	}
 }
