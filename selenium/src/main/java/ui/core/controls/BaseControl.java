@@ -72,6 +72,13 @@ public abstract class BaseControl {
         Assert.assertEquals(getActualText(locator), text);
     }
 
+    public void assertTextContains(String text) {
+        if (!getActualText(locator).equals(text)) {
+            wait(1000);
+        }
+        Assert.assertTrue(getActualText(locator).contains(text));
+    }
+
     private String getActualText(Locator locator) {
         String actualText;
         if (this.getClass().isAssignableFrom(TextBox.class)) {

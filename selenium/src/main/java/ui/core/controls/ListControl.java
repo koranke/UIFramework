@@ -4,6 +4,9 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import ui.core.Locator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
 Usage
 * locator: Locator for the root element that contains the rows.
@@ -58,4 +61,13 @@ public abstract class ListControl<T> extends BaseControl {
         this.currentRow = searchLabel.getIndex(text);
         return (T) this;
     }
+
+    public List<String> getAllLabels() {
+        List<String> allLabels = new ArrayList<>();
+        for (int i = 1; i <= getRowCount(); i++) {
+            allLabels.add(searchLabel.get(i).getText());
+        }
+        return allLabels;
+    }
+
 }
