@@ -8,12 +8,14 @@ import saucedemo.SauceDemoSite;
 import saucedemo.enums.SortingDirection;
 import saucedemo.pages.productsPage.ListProducts;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductsSteps {
 	private final SauceDemoSite site = new SauceDemoSite();
+	private int productIndex = 1;
 
 	@Given("I am on the products page")
 	public void iAmOnTheProductsPage() {
@@ -40,7 +42,7 @@ public class ProductsSteps {
 				products.usingLabelName();
 				List<String> productNames = site.productsPage().listProducts().getAllLabels();
 				if (sortingDirection == SortingDirection.DESCENDING) {
-					assertThat(productNames).isSortedAccordingTo((a, b) -> b.compareTo(a));
+					assertThat(productNames).isSortedAccordingTo(Comparator.reverseOrder());
 				} else {
 					assertThat(productNames).isSorted();
 				}
@@ -66,13 +68,13 @@ public class ProductsSteps {
 		return SortingDirection.valueOf(direction.toUpperCase());
 	}
 
-	@Then("I should see {int} item in the cart")
+	@Then("I should see {int} item(s) in the cart")
 	public void iShouldSeeItemInTheCart(int cartCount) {
 		assertThat(site.productsPage().labelCartCount().getText()).isEqualTo(String.valueOf(cartCount));
 	}
 
-	@When("I add a/another product to the cart")
+	@When("I (have )add(ed) a/another product to the cart")
 	public void iAddAProductToTheCart() {
-		site.productsPage().listProducts().withRow(1).buttonAddToCart().click();
+		site.productsPage().listProducts().withRow(productIndex++).buttonAddToCart().click();
 	}
 }

@@ -20,7 +20,7 @@ Feature: Products page with search functionality
     When I add a product to the cart
     Then I should see 1 item in the cart
 
-  Scenario: Add product to cart
+  Scenario: Add another product to cart
     Given I am on the products page
     And I have added a product to the cart
     When I add another product to the cart
