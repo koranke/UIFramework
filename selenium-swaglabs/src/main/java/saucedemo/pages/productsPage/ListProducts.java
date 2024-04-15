@@ -55,6 +55,11 @@ public class ListProducts extends ListControl<ListProducts> {
 		return this;
 	}
 
+	public ListProducts usingLabelPrice() {
+		this.searchLabel = labelPrice;
+		return this;
+	}
+
 	public Label labelPrice() {
 		return labelPrice.get(currentRow);
 	}
