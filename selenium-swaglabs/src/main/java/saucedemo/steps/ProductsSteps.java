@@ -35,7 +35,7 @@ public class ProductsSteps {
 	}
 
 	@Then("I should see all products sorted by {word} {sortingDirection}")
-	public void iShouldSeeAllProductsSortedSortingDirectionBySortingField(SortingDirection sortingDirection, String sortingField) {
+	public void iShouldSeeAllProductsSortedSortingDirectionBySortingField(String sortingField, SortingDirection sortingDirection) {
 		ListProducts products = site.productsPage().listProducts();
 		switch (sortingField) {
 			case "Name":
