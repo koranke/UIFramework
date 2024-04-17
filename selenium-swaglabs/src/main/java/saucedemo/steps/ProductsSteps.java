@@ -14,8 +14,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductsSteps {
-	private final SauceDemoSite site = new SauceDemoSite();
+	private SauceDemoSite site;
 	private int productIndex = 1;
+
+	public ProductsSteps(SauceDemoSite site) {
+		this.site = site;
+	}
 
 	@Given("I am on the products page")
 	public void iAmOnTheProductsPage() {
@@ -73,9 +77,11 @@ public class ProductsSteps {
 		assertThat(site.productsPage().labelCartCount().getText()).isEqualTo(String.valueOf(cartCount));
 	}
 
-	@When("I (have )add(ed) a/another product to the cart")
-	public void iAddAProductToTheCart() {
-		site.productsPage().listProducts().withRow(productIndex++).buttonAddToCart().click();
+	@When("I (have )add(ed) (another ){int} product(s) to the cart")
+	public void iAddAProductToTheCart(int productCount) {
+		for (int i = 0; i < productCount; i++) {
+			site.productsPage().listProducts().withRow(productIndex++).buttonAddToCart().click();
+		}
 	}
 
 	@When("I remove a product from the cart")
@@ -86,5 +92,10 @@ public class ProductsSteps {
 	@Then("I should see no items in the cart")
 	public void iShouldSeeNoItemsInTheCart() {
 		site.productsPage().labelCartCount().assertIsNotVisible();
+	}
+
+	@When("I click the shopping cart icon")
+	public void iClickTheShoppingCartIcon() {
+		site.productsPage().buttonCart().click();
 	}
 }

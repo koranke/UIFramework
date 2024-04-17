@@ -1,5 +1,6 @@
-package swaglabs;
+package swaglabs.regulartests;
 
+import general.TestBase;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import saucedemo.SauceDemoSite;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Test
-public class LoginTests {
+public class LoginTests extends TestBase {
 
 	public void testLoginWithValidCredentials() {
 		SauceDemoSite site = new SauceDemoSite();

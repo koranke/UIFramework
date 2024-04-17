@@ -1,4 +1,4 @@
-package swaglabs;
+package swaglabs.regulartests;
 
 import general.TestBase;
 import org.testng.annotations.Test;

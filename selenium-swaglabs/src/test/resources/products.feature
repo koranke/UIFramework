@@ -17,17 +17,17 @@ Feature: Products page with search functionality
 
   Scenario: Add product to cart
     Given I am on the products page
-    When I add a product to the cart
+    When I add 1 product to the cart
     Then I should see 1 item in the cart
 
   Scenario: Add another product to cart
     Given I am on the products page
-    And I have added a product to the cart
-    When I add another product to the cart
+    And I have added 1 product to the cart
+    When I add another 1 product to the cart
     Then I should see 2 items in the cart
 
   Scenario: Remove a product from the cart
     Given I am on the products page
-    And I have added a product to the cart
+    And I have added 1 product to the cart
     When I remove a product from the cart
     Then I should see no items in the cart

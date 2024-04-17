@@ -1,12 +1,14 @@
-package swaglabs;
+package swaglabs.cucumbertests;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
-@CucumberOptions(plugin = { "html:selenium-swaglabs/target/results.html", "message:selenium-swaglabs/target/results.ndjson" },
+@CucumberOptions(plugin = { "html:selenium-swaglabs/target/results.html", "message:selenium-swaglabs/target/results.ndjson",
+	"org.example.CucumberEvents.class" },
 	features = "selenium-swaglabs/src/test/resources",
 	glue = "saucedemo.steps")
+
 public class RunCucumberTest extends AbstractTestNGCucumberTests {
 
 	@DataProvider(parallel = true)
