@@ -10,6 +10,7 @@ import ui.core.enums.LocatorMethod;
 public class ListProducts extends ListControl<ListProducts> {
 	private final RepeatingControl<Label> labelPrice;
 	private final RepeatingControl<Label> labelName;
+	private final RepeatingControl<Label> labelDescription;
 	private final RepeatingControl<Button> buttonAddToCart;
 	private final RepeatingControl<Button> buttonRemoveFromCart;
 
@@ -29,6 +30,14 @@ public class ListProducts extends ListControl<ListProducts> {
 		labelName = new RepeatingControl<>(
 				locator,
 				".//div[@class='inventory_item_name ']",
+				LocatorMethod.XPATH,
+				Label::new,
+				rowLocatorPattern,
+				hasHeader
+		);
+		labelDescription = new RepeatingControl<>(
+				locator,
+				".//div[@class='inventory_item_desc']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -66,6 +75,10 @@ public class ListProducts extends ListControl<ListProducts> {
 
 	public Label labelName() {
 		return labelName.get(currentRow);
+	}
+
+	public Label labelDescription() {
+		return labelDescription.get(currentRow);
 	}
 
 	public Button buttonAddToCart() {

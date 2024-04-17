@@ -104,7 +104,7 @@ public class RepeatingControl<T> extends BaseControl {
 	public Integer getIndex(String targetText) {
 		int startingIndex = hasHeader ? 2 : 1;
 		int rowCount = getRowCount();
-		for (int i = startingIndex; i < rowCount; i++) {
+		for (int i = startingIndex; i <= rowCount; i++) {
 			TextControl textControl = (TextControl) get(i);
 			if (textControl.getText().contains(targetText)) {
 				return i;
