@@ -9,18 +9,17 @@ import io.cucumber.java.en.When;
 import saucedemo.SauceDemoSite;
 import saucedemo.domain.Product;
 import saucedemo.enums.SortingDirection;
+import saucedemo.general.ProductsHelper;
 import saucedemo.general.ScenarioState;
-import saucedemo.pages.productsPage.ListProducts;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductsSteps {
-	private SauceDemoSite site;
-	private ScenarioState scenarioState;
+	private final SauceDemoSite site;
+	private final ScenarioState scenarioState;
 	private int productIndex = 1;
 
 	public ProductsSteps(SauceDemoSite site, ScenarioState scenarioState) {
@@ -35,43 +34,13 @@ public class ProductsSteps {
 
 	@When("I sort products by {word} {sortingDirection}")
 	public void iSortProductsBySortDirection(String sortingField, SortingDirection sortingDirection) {
-		String sortingOption = sortingField;
-		if (sortingDirection == SortingDirection.ASCENDING) {
-			sortingOption += sortingField.equals("Name") ? " (A to Z)" : " (low to high)";
-		} else {
-			sortingOption += sortingField.equals("Name") ? " (Z to A)" : " (high to low)";
-		}
-
-		site.productsPage().comboBoxSort().setText(sortingOption);
+		site.productsPage().setSortingOption(sortingField, sortingDirection);
 	}
 
 	@Then("I should see all products sorted by {word} {sortingDirection}")
 	public void iShouldSeeAllProductsSortedSortingDirectionBySortingField(String sortingField, SortingDirection sortingDirection) {
-		ListProducts products = site.productsPage().listProducts();
-		switch (sortingField) {
-			case "Name":
-				products.usingLabelName();
-				List<String> productNames = site.productsPage().listProducts().getAllLabels();
-				if (sortingDirection == SortingDirection.DESCENDING) {
-					assertThat(productNames).isSortedAccordingTo(Comparator.reverseOrder());
-				} else {
-					assertThat(productNames).isSorted();
-				}
-				break;
-			case "Price":
-				products.usingLabelPrice();
-				List<Double> productPrices = site.productsPage().listProducts().getAllLabels().stream()
-						.map(price -> Double.parseDouble(price.replace("$", "")))
-						.toList();
-				if (sortingDirection == SortingDirection.DESCENDING) {
-					assertThat(productPrices).isSortedAccordingTo((a, b) -> Double.compare(b, a));
-				} else {
-					assertThat(productPrices).isSorted();
-				}
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown sorting field: " + sortingField);
-		}
+		List<Product> products = site.productsPage().getAllProducts();
+		ProductsHelper.verifyProductsSortOrder(products, sortingField, sortingDirection);
 	}
 
 	@ParameterType("ascending|descending")
@@ -112,11 +81,7 @@ public class ProductsSteps {
 		List<Product> products = new ArrayList<>();
 		productNames.forEach(productName -> {
 			site.productsPage().listProducts().usingLabelName().withRow(productName).buttonAddToCart().click();
-			Product newProduct = new Product();
-			newProduct.setName(productName);
-			newProduct.setDescription(site.productsPage().listProducts().labelDescription().getText());
-			newProduct.setPrice(Double.parseDouble(site.productsPage().listProducts().labelPrice().getText().replace("$", "")));
-			products.add(newProduct);
+			products.add(site.productsPage().listProducts().getCurrentProduct());
 		});
 		scenarioState.setProducts(products);
 	}

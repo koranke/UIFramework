@@ -1,5 +1,6 @@
 package saucedemo.pages.productsPage;
 
+import saucedemo.domain.Product;
 import ui.core.Locator;
 import ui.core.controls.Button;
 import ui.core.controls.Label;
@@ -87,5 +88,13 @@ public class ListProducts extends ListControl<ListProducts> {
 
 	public Button buttonRemoveFromCart() {
 		return buttonRemoveFromCart.get(currentRow);
+	}
+
+	public Product getCurrentProduct() {
+		Product product = new Product();
+		product.setName(labelName().getText());
+		product.setDescription(labelDescription().getText());
+		product.setPrice(Double.parseDouble(labelPrice().getText().replace("$", "")));
+		return product;
 	}
 }
