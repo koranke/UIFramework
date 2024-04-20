@@ -2,6 +2,7 @@ package saucedemo.general;
 
 import saucedemo.domain.Product;
 import saucedemo.enums.SortingDirection;
+import saucedemo.pages.cartPage.CartPage;
 
 import java.util.Comparator;
 import java.util.List;
@@ -36,6 +37,19 @@ public class ProductsHelper {
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown sorting field: " + sortingField);
+		}
+	}
+
+	public static void verifyProductsInCart(List<Product> expectedProducts, CartPage cartPage) {
+		if (expectedProducts == null || expectedProducts.isEmpty()) {
+			cartPage.listCartItems().assertIsNotVisible();
+		} else {
+			for (Product product : expectedProducts) {
+				cartPage.listCartItems().usingLabelName().withRow(product.getName()).labelName().assertText(product.getName());
+				cartPage.listCartItems().labelDescription().assertText(product.getDescription());
+				cartPage.listCartItems().labelPrice().assertText(String.format("$%.2f", product.getPrice()));
+				cartPage.listCartItems().labelQuantity().assertText("1");
+			}
 		}
 	}
 }

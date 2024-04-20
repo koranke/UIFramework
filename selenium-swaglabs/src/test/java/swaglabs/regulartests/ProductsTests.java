@@ -22,7 +22,7 @@ public class ProductsTests extends TestBase {
 	}
 
 	@DataProvider(name = "SortScenarios")
-	public Object[][] getSortScen() {
+	public Object[][] getSortScenarios() {
 		List<Object[]> data = new ArrayList<>();
 
 		data.add(new Object[]{ "Name", SortingDirection.ASCENDING });
