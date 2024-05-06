@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 
 public abstract class Site<T> {
     public String baseUrl;
+    @Getter
     public WebDriver webDriver;
 
     @Setter

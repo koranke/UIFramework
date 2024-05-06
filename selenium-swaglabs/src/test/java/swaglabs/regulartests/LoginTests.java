@@ -4,6 +4,7 @@ import general.TestBase;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import saucedemo.SauceDemoSite;
+import saucedemo.general.SauceCookieScenario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,4 +35,13 @@ public class LoginTests extends TestBase {
 		site.loginPage().signIn(userName, password);
 		site.loginPage().labelError().assertTextContains(errorMessage);
 	}
+
+	@Test
+	public void testCookiesToInventory() {
+		SauceDemoSite site = new SauceDemoSite();
+		site.loginPage().goTo();
+		new SauceCookieScenario().create();
+		site.productsPage().goTo();
+	}
+
 }
