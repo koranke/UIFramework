@@ -37,4 +37,8 @@ public interface Props extends Config {
 	@Key("ui.visualTest.maxDiffPixels")
 	@DefaultValue("0")
 	Integer maxDiffPixels();
+
+	@Key("ui.useBiDi")
+	@DefaultValue("false")
+	Boolean useBiDi();
 }

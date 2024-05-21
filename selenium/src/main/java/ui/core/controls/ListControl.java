@@ -1,5 +1,6 @@
 package ui.core.controls;
 
+import lombok.Setter;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import ui.core.Locator;
@@ -19,7 +20,14 @@ if "headerUsesRowLocatorPattern" is false.
 public abstract class ListControl<T> extends BaseControl {
     protected int currentRow;
     protected RepeatingControl<Label> searchLabel;
+
+    /*
+    In some cases, a list control may appear on different pages with different row locator patterns but otherwise
+    identical structure.  This allows for using a single definition for the list but setting the row locator pattern at runtime.
+     */
+    @Setter
     protected String rowLocatorPattern;
+
     protected boolean hasHeader;
     protected boolean headerUsesRowLocatorPattern;
     protected String headerControlId;

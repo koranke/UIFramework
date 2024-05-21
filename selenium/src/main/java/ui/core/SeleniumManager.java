@@ -69,7 +69,9 @@ public class SeleniumManager {
 		switch (targetBrowser) {
 			case CHROMIUM, CHROME -> {
 				ChromeOptions options = new ChromeOptions();
-
+				if (props.useBiDi()) {
+					options.setCapability("webSocketUrl", true);
+				}
 				if (props.headless()) {
 					options.addArguments("--headless=new");
 				}
@@ -77,6 +79,9 @@ public class SeleniumManager {
 			}
 			case EDGE -> {
 				EdgeOptions options = new EdgeOptions();
+				if (props.useBiDi()) {
+					options.setCapability("webSocketUrl", true);
+				}
 				if (props.headless()) {
 					options.addArguments("--headless=new");
 				}
@@ -87,6 +92,9 @@ public class SeleniumManager {
 			}
 			case FIREFOX -> {
 				FirefoxOptions options = new FirefoxOptions();
+				if (props.useBiDi()) {
+					options.setCapability("webSocketUrl", true);
+				}
 				if (props.headless()) {
 					options.addArguments("-headless");
 				}

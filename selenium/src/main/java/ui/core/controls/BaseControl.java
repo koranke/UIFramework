@@ -101,4 +101,16 @@ public abstract class BaseControl {
     public void wait(int timeToWait) {
         SystemHelper.sleep(timeToWait);
     }
+
+    public void hover() {
+        locator.hover();
+    }
+
+    public void scrollToElement() {
+        locator.scrollToElement();
+    }
+
+    public String getAttribute(String attributeName) {
+        return locator.getAttribute(attributeName);
+    }
 }

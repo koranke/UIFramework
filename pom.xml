@@ -16,6 +16,7 @@
         <module>playwright</module>
         <module>playwright-swaglabs</module>
         <module>playwright-testweb</module>
+        <module>selenium-magento</module>
     </modules>
 
     <properties>

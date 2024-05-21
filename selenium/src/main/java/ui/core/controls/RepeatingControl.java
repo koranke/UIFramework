@@ -10,6 +10,14 @@ import ui.core.enums.LocatorMethod;
 import java.util.function.Function;
 
 public class RepeatingControl<T> extends BaseControl {
+
+	/*
+	In some cases, a repeating control may not only repeat across rows, but repeat within the same row.  In this case, the
+	"replacementText" field can be used to uniquely identify the variations within the same row.  For example, a row may
+	contain multiple "color" options where the only difference is the color name.
+	When using replacementText, the controlId should be a format string with %s as placeholder.
+	 */
+	private String replacementText;
 	private final String controlId;
 	private final String controlId2;
 	private final String controlId3;
@@ -59,6 +67,11 @@ public class RepeatingControl<T> extends BaseControl {
 		this.hasHeader = hasHeader;
 	}
 
+	public T get(int row, String replacementText) {
+		this.replacementText = replacementText;
+		return get(row);
+	}
+
 	public T get(int row) {
 		if (getControl == null) {
 			return getCustom(row);
@@ -73,7 +86,7 @@ public class RepeatingControl<T> extends BaseControl {
 				case TEXT:
 					return getControl.apply(getRowLocator(row).withNext(By.xpath(String.format(".//*[text()='%s']", controlId))));
 				case XPATH:
-					return getControl.apply(getRowLocator(row).withNext(By.xpath(controlId)));
+					return getControl.apply(getRowLocator(row).withNext(By.xpath(replacementText == null ? controlId : String.format(controlId, replacementText))));
 			}
 		}
 		return null;
