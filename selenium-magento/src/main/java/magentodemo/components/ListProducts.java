@@ -8,11 +8,11 @@ import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
 
 public class ListProducts extends ListControl<ListProducts> {
-	private RepeatingControl<Label> labelName;
-	private RepeatingControl<Label> labelPrice;
-	private RepeatingControl<Label> labelOption;
-	private RepeatingControl<Label> labelColor;
-	private RepeatingControl<Button> buttonAddToCart;
+	private final RepeatingControl<Label> labelName;
+	private final RepeatingControl<Label> labelPrice;
+	private final RepeatingControl<Label> labelOption;
+	private final RepeatingControl<Label> labelColor;
+	private final RepeatingControl<Button> buttonAddToCart;
 
 	public ListProducts(Locator locator, String rowLocatorPattern) {
 		super(locator);
@@ -21,7 +21,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelName = new RepeatingControl<>(
 				locator,
-				"//a[@class='product-item-link']",
+				".//a[@class='product-item-link']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -30,7 +30,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelPrice = new RepeatingControl<>(
 				locator,
-				"//span[@class='price']",
+				".//span[@class='price']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -39,7 +39,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelOption = new RepeatingControl<>(
 				locator,
-				"//div[@class='swatch-attribute-options clearfix']/div[text()='{0}']",
+				".//div[@class='swatch-attribute-options clearfix']/div[text()='%s']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -48,7 +48,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelColor = new RepeatingControl<>(
 				locator,
-				"//div[@class='swatch-attribute color']//div[@option-label='{0}']",
+				".//div[@class='swatch-attribute color']//div[@option-label='%s']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -57,7 +57,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.buttonAddToCart = new RepeatingControl<>(
 				locator,
-				"//button[@title='Add to Cart']",
+				".//button[@title='Add to Cart']",
 				LocatorMethod.XPATH,
 				Button::new,
 				rowLocatorPattern,
@@ -70,23 +70,24 @@ public class ListProducts extends ListControl<ListProducts> {
 		return this;
 	}
 
-	public Label labelName(int index) {
-		return labelName.get(index);
+	public Label labelName() {
+		return labelName.get(currentRow);
 	}
 
-	public Label labelPrice(int index) {
-		return labelPrice.get(index);
+	public Label labelPrice() {
+		return labelPrice.get(currentRow);
 	}
 
-	public Label labelOption(int index) {
-		return labelOption.get(index);
+	public Label labelOption(String option) {
+		return labelOption.get(currentRow, option);
 	}
 
-	public Label labelColor(int index) {
-		return labelColor.get(index);
+	public Label labelColor(String color) {
+		return labelColor.get(currentRow, color);
 	}
 
-	public Button buttonAddToCart(int index) {
-		return buttonAddToCart.get(index);
+	public Button buttonAddToCart() {
+		return buttonAddToCart.get(currentRow);
 	}
+
 }
