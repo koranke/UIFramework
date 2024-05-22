@@ -1,11 +1,15 @@
 package magentodemo.components;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import ui.core.Locator;
 import ui.core.controls.Button;
 import ui.core.controls.Label;
 import ui.core.controls.ListControl;
 import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
+
+import java.util.List;
 
 public class ListProducts extends ListControl<ListProducts> {
 	private final RepeatingControl<Label> labelName;
@@ -39,7 +43,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelOption = new RepeatingControl<>(
 				locator,
-				".//div[@class='swatch-attribute-options clearfix']/div[text()='%s']",
+				".//div[@class='swatch-option text' and text()='%s']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -48,7 +52,7 @@ public class ListProducts extends ListControl<ListProducts> {
 
 		this.labelColor = new RepeatingControl<>(
 				locator,
-				".//div[@class='swatch-attribute color']//div[@option-label='%s']",
+				".//div[@class='swatch-option color' and @option-label='%s']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
@@ -88,6 +92,18 @@ public class ListProducts extends ListControl<ListProducts> {
 
 	public Button buttonAddToCart() {
 		return buttonAddToCart.get(currentRow);
+	}
+
+	public List<String> getAllSizes() {
+		String sizesPattern = ".//div[@class='swatch-option text']";
+		List<WebElement> sizes = getRowAsElement(currentRow).findElements(By.xpath(sizesPattern));
+		return sizes.stream().map(WebElement::getText).toList();
+	}
+
+	public List<String> getAllColors() {
+		String sizesPattern = ".//div[@class='swatch-option color']";
+		List<WebElement> colors = getRowAsElement(currentRow).findElements(By.xpath(sizesPattern));
+		return colors.stream().map(item -> item.getAttribute("option-label")).toList();
 	}
 
 }

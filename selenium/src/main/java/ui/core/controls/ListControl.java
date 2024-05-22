@@ -2,6 +2,7 @@ package ui.core.controls;
 
 import lombok.Setter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import ui.core.Locator;
 
@@ -76,6 +77,15 @@ public abstract class ListControl<T> extends BaseControl {
             allLabels.add(searchLabel.get(i).getText());
         }
         return allLabels;
+    }
+
+
+    public Locator getRowLocator(int row) {
+        return locator.getWithNextLocator(By.xpath(String.format("%s[%d]", rowLocatorPattern, row)));
+    }
+
+    public WebElement getRowAsElement(int row) {
+        return getRowLocator(row).getElement();
     }
 
 }

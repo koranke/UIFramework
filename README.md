@@ -121,7 +121,7 @@ Additionally, panel classes can be used to help break up large, complex pages in
 
 ### Repeating Elements in Lists and Tables
 A repeating element is where an element can appear multiple times (for example, in a list or table) and where each instance 
-of the element has the same test element reference.  Typically, this is the case with dynamic content.  For example, a list of products 
+of the element has the same test element relative reference.  Typically, this is the case with dynamic content.  For example, a list of products 
 where the products are loaded from a database.
 
 ### Site Class
@@ -157,7 +157,7 @@ private static final String homeUrl = "/home.html";
 8. In the constructor, add the page URL to the url map along with the name for the page.  For example...
 
 ```java
-        pageUrlMap.put(homeUrl, "Home");
+pageUrlMap.put(homeUrl, "Home");
 ```
 9. Update the method "makeSinglePageForSite" for the new page and run.
 10. This will open the website and navigate to the desired page (if possible) and scan all available controls.  
@@ -318,7 +318,8 @@ public class ListProducts extends ListControl<ListProducts> {
 ```
 
 #### Step Three
-Finally, add a "using" method for all "label" controls and add a "getter" method for all controls.  For example...
+Finally, add a "using" method for all "label" controls where you may want to search for a row by that label 
+and also add a "getter" method for all controls.  For example...
 
 ```java
 public class ListProducts extends ListControl<ListProducts> {
@@ -362,7 +363,34 @@ public class ListProducts extends ListControl<ListProducts> {
 }
 ```
 
+#### Special Note: Repeating elements within repeating elements
+If a row contains an element that no only repeats across rows but also repeats
+within the same row, this can be handled by creating a repeating element that
+includes a pattern placeholder for the inner repeating element.  For example...
 
+```java
+this.labelColor = new RepeatingControl<>(
+        locator,
+        ".//div[@class='swatch-option color' and @option-label='%s']",
+        LocatorMethod.XPATH,
+        Label::new,
+        rowLocatorPattern,
+        hasHeader
+);
+```
+...followed by a getter method that takes accepts the parameter value.  For example...
+    
+```java
+public Label labelColor(String color) {
+    return labelColor.get(currentRow, color);
+}
+```
+
+This could then be used in a test as follows...
+    
+```java
+listProducts.usingRow(2).labelColor("Blue").click();
+```
 
 ### Creating Tests
 All tests need to create an instance of the desired website in order to interact with web pages.  The website
@@ -370,9 +398,9 @@ class handles initialization and configuration of the needed Playwright or Selen
 web pages and their controls.  Example test...
 
 ```java
-     public void testSomething() {
-          HomePage homePage = new TestWebSite().homePage().goTo();
-     }
+public void testSomething() {
+    HomePage homePage = new TestWebSite().homePage().goTo();
+}
 ```
 
 All controls only expose methods that they support.  For example, a button control will not expose a "typeText" method.
@@ -380,42 +408,42 @@ Controls, where applicable, will also expose methods for asserting the control s
 expose an "assertText" method.  Example test...
 
 ```java
-     public void testSomething() {
-          HomePage homePage = new TestWebSite().homePage().goTo();
-          homePage.textBoxNumber().assertIsEnabled();
-          homePage.textBoxNumber().typeText("123");
-          homePage.textBoxNumber().assertText("123");
-          homePage.comboBoxColors().selectOption("Blue");
-          homePage.buttonSubmit().click();
-     }
+public void testSomething() {
+    HomePage homePage = new TestWebSite().homePage().goTo();
+    homePage.textBoxNumber().assertIsEnabled();
+    homePage.textBoxNumber().typeText("123");
+    homePage.textBoxNumber().assertText("123");
+    homePage.comboBoxColors().selectOption("Blue");
+    homePage.buttonSubmit().click();
+}
 ```
 
 If a test needs to work with multiple pages, then the website class can be used to reference the desired pages.  
 Example...
 
 ```java
-     public void testSomething() {
-          TestWebSite website = new TestWebSite();
-          LoginPage loginPage = website.loginPage().goTo();
-          loginPage.textBoxUser().typeText("Joe");
-          loginPage.textBoxPassword().typeText("123");
-          loginPage.buttonLogin().click();  //this takes user to home page.
-		  
-          HomePage homePage = website.homePage();
-          homePage.textBoxNumber().typeText("123");
-     }
+public void testSomething() {
+    TestWebSite website = new TestWebSite();
+    LoginPage loginPage = website.loginPage().goTo();
+    loginPage.textBoxUser().typeText("Joe");
+    loginPage.textBoxPassword().typeText("123");
+    loginPage.buttonLogin().click();  //this takes user to home page.
+    
+    HomePage homePage = website.homePage();
+    homePage.textBoxNumber().typeText("123");
+}
 ```
 
 If a test needs to work with repeating elements, then the list or table control can be used to reference the desired
 repeating element.  Example...
 
 ```java
-     public void testSomething() {
-          HomePage homePage = new TestWebSite().homePage().goTo();
-          homePage.listProducts().usingRow(2).labelPrice().assertText("12.50");
+public void testSomething() {
+    HomePage homePage = new TestWebSite().homePage().goTo();
+    homePage.listProducts().usingRow(2).labelPrice().assertText("12.50");
 
-          homePage.tableOrders().assertRowCount(5);
-          homePage.tableOrders().usingRow(2).buttonRemove().click();
-          homePage.tableOrders().assertRowCount(4);
-     }
+    homePage.tableOrders().assertRowCount(5);
+    homePage.tableOrders().usingRow(2).buttonRemove().click();
+    homePage.tableOrders().assertRowCount(4);
+}
 ```
