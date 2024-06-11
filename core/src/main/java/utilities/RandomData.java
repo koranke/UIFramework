@@ -27,7 +27,7 @@ public class RandomData {
 		return output.toString().trim().substring(0, length - 1);
 	}
 
-	public static int getRandomInt(int min, int max) {
+	public static Integer getRandomInt(int min, int max) {
 		if (min == max) {
 			return max;
 		}
