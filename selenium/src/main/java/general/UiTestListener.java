@@ -1,15 +1,19 @@
 package general;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import configuration.FrameworkConstants;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import ui.core.SeleniumManager;
 import utilities.Log;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class UiTestListener extends TestListenerAdapter {
@@ -31,9 +35,13 @@ public class UiTestListener extends TestListenerAdapter {
         setup phase, before a page has opened, in which case there is no screenshot to take.
          */
         if (webDriver != null) {
-            File file = ((TakesScreenshot) SeleniumManager.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
-            try {
-                FileUtils.copyFile(file, new File(FrameworkConstants.imagesPathErrors + fileName));
+            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(webDriver);
+            BufferedImage image = screenshot.getImage();
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                ImageIO.write(image, "png", baos);
+                baos.flush();
+                byte[] imageInByte = baos.toByteArray();
+                FileUtils.writeByteArrayToFile(new File(FrameworkConstants.imagesPathErrors + fileName), imageInByte);
             } catch (Exception e) {
                 log.logAssert(false, e.getMessage());
             }
