@@ -2,6 +2,7 @@ package magentodemo;
 
 import general.TestBase;
 import magentodemo.components.ListProducts;
+import magentodemo.domain.Product;
 import magentodemo.pages.homePage.HomePage;
 import org.testng.annotations.Test;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestHomePage extends TestBase {
+public class HomePageTests extends TestBase {
 
 	@Test
 	public void testHomePage() {
@@ -17,10 +18,10 @@ public class TestHomePage extends TestBase {
 		site.homePage().open();
 		site.homePage().assertIsOpen();
 
-		site.homePage().navigationPanel().whatsNew().click();
+		site.homePage().panelNavigation().whatsNew().click();
 		site.whatIsNewPage().assertIsOpen();
 
-		site.whatIsNewPage().navigationPanel().logo().click();
+		site.whatIsNewPage().panelNavigation().logo().click();
 		site.homePage().assertIsOpen();
 	}
 
@@ -28,10 +29,8 @@ public class TestHomePage extends TestBase {
 	public void testSearch() {
 		MagentoDemoSite site = new MagentoDemoSite();
 		site.homePage().open();
-		site.homePage().assertIsOpen();
-
-		site.homePage().navigationPanel().textBoxSearch().setText("shirt");
-		site.homePage().navigationPanel().buttonSearch().click();
+		site.homePage().panelNavigation().searchFor("shirt");
+		site.searchResultsPage().assertIsOpen();
 		site.searchResultsPage().labelResults().assertText("Search results for: 'shirt'");
 		site.searchResultsPage().listProducts().assertRowCount(5);
 	}
@@ -51,20 +50,18 @@ public class TestHomePage extends TestBase {
 	public void testAddToCart() {
 		HomePage homePage = new MagentoDemoSite().homePage().open();
 		ListProducts listProducts = homePage.listProducts();
-
-		addProductToCart(listProducts, "Hero Hoodie", "L", "Green");
-		addProductToCart(listProducts, "Radiant Tee", "M", "Orange");
-
+		List<Product> products = listProducts.getAllProducts();
+		listProducts.addProductToCart(products.get(0), 0 , 0);
+		listProducts.addProductToCart(products.get(1), 1 , 1);
+		homePage.panelNavigation().labelCartCount().assertText("2");
 	}
 
-
-	private void addProductToCart(ListProducts listProducts, String productName, String option, String color) {
-		listProducts.usingLabelName().withRow(productName).labelName().scrollToElement();
-		listProducts.labelName().hover();
-		listProducts.labelColor(color).click();
-		listProducts.labelOption(option).click();
-		listProducts.buttonAddToCart().assertIsVisible();
-		listProducts.buttonAddToCart().click();
+	@Test
+	public void testProducts() {
+		HomePage homePage = new MagentoDemoSite().homePage().open();
+		ListProducts listProducts = homePage.listProducts();
+		List<Product> products = listProducts.getAllProducts();
+		assertThat(products).hasSize(6);
 	}
 
 }

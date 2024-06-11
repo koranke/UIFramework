@@ -57,8 +57,16 @@ public abstract class BasePage<T> {
 	This method can give unexpected results when preceded by goTo method.
 	 */
 	public boolean isOpen() {
-		return new WebDriverWait(webDriver, Duration.of(30, ChronoUnit.SECONDS))
-				.until(ExpectedConditions.urlToBe(url));
+		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+		try {
+			if (url.endsWith(".*")) {
+				return wait.until(condition -> condition.getCurrentUrl().startsWith(url.replace(".*", "")));
+			} else {
+				return wait.until(condition -> condition.getCurrentUrl().equals(url));
+			}
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public void assertIsOpen() {

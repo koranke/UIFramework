@@ -1,5 +1,6 @@
 package magentodemo.components;
 
+import magentodemo.domain.Product;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import ui.core.Locator;
@@ -9,6 +10,7 @@ import ui.core.controls.ListControl;
 import ui.core.controls.RepeatingControl;
 import ui.core.enums.LocatorMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListProducts extends ListControl<ListProducts> {
@@ -104,6 +106,43 @@ public class ListProducts extends ListControl<ListProducts> {
 		String sizesPattern = ".//div[@class='swatch-option color']";
 		List<WebElement> colors = getRowAsElement(currentRow).findElements(By.xpath(sizesPattern));
 		return colors.stream().map(item -> item.getAttribute("option-label")).toList();
+	}
+
+	public void addProductToCart(String productName, String option, String color) {
+		log.info("Adding product to cart: " + productName);
+		this.usingLabelName().withRow(productName).labelName().scrollToElement();
+		this.labelName().hover();
+		if (color != null) this.labelColor(color).click();
+		if (option != null) this.labelOption(option).click();
+		this.buttonAddToCart().assertIsVisible();
+		this.buttonAddToCart().click();
+	}
+
+	public void addProductToCart(Product product, Integer sizeIndex, Integer colorIndex) {
+		addProductToCart(
+				product.getName(),
+				sizeIndex  == null ? null : product.getSizes().get(sizeIndex),
+				colorIndex == null ? null : product.getColors().get(colorIndex)
+		);
+	}
+
+	public Product getProduct(int row) {
+		this.withRow(row);
+		Product product = new Product();
+		product.setName(labelName().getText());
+		product.setPrice(labelPrice().getText());
+		product.setSizes(getAllSizes());
+		product.setColors(getAllColors());
+		return product;
+	}
+
+	public List<Product> getAllProducts() {
+		List<Product> products = new ArrayList<>();
+		for (int i = 1; i <= getRowCount(); i++) {
+			products.add(getProduct(i));
+		}
+
+		return products;
 	}
 
 }
