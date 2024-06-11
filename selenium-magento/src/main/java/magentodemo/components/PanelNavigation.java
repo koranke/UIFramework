@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import ui.core.controls.Button;
 import ui.core.controls.ImageControl;
 import ui.core.controls.Label;
+import ui.core.controls.LinkControl;
 import ui.core.controls.MenuOption;
 import ui.core.controls.PanelControl;
 import ui.core.controls.TextBox;
@@ -14,6 +15,7 @@ import ui.core.controls.TextBox;
 @Getter
 @Accessors(fluent = true)
 public class PanelNavigation extends PanelControl {
+	private final LinkControl linkCreateAccount;
 	private final String menuSelector = "//nav//span[text()=\"%s\"]";
 	private final MenuOption whatsNew;
 	private final MenuOption women;
@@ -27,6 +29,7 @@ public class PanelNavigation extends PanelControl {
 
 	public PanelNavigation(WebDriver driver) {
 		this.webDriver = driver;
+		this.linkCreateAccount = new LinkControl(this.webDriver, By.xpath("//div[@class='panel wrapper']//a[text()='Create an Account']"));
 		this.whatsNew = new MenuOption(this.webDriver, getMenuSelector("What's New"));
 		this.women = new MenuOption(this.webDriver, getMenuSelector("Women"));
 

@@ -1,12 +1,14 @@
 package magentodemo;
 
 import magentodemo.pages.homePage.HomePage;
+import magentodemo.pages.newCustomerPage.NewCustomerPage;
 import magentodemo.pages.searchResultsPage.SearchResultsPage;
 import magentodemo.pages.whatIsNewPage.WhatIsNewPage;
 import ui.core.Site;
 
 public class MagentoDemoSite extends Site<MagentoDemoSite> {
 	private HomePage homePage;
+	private NewCustomerPage newCustomerPage;
 	private WhatIsNewPage whatIsNewPage;
 	private SearchResultsPage searchResultsPage;
 
@@ -24,6 +26,13 @@ public class MagentoDemoSite extends Site<MagentoDemoSite> {
 			homePage = new HomePage(this);
 		}
 		return homePage;
+	}
+
+	public NewCustomerPage newCustomerPage() {
+		if (newCustomerPage == null) {
+			newCustomerPage = new NewCustomerPage(this);
+		}
+		return newCustomerPage;
 	}
 
 	public WhatIsNewPage whatIsNewPage() {
