@@ -1,7 +1,7 @@
 package magentodemo;
 
 import general.TestBase;
-import magentodemo.domain.Customer;
+import magentodemo.domain.Account;
 import org.testng.annotations.Test;
 
 public class CustomerAccountTests extends TestBase {
@@ -17,6 +17,6 @@ public class CustomerAccountTests extends TestBase {
 	@Test
 	public void testCreateNewCustomerAccount() {
 		MagentoDemoSite site = new MagentoDemoSite();
-		Customer customer = site.newCustomerPage().open().createRandomAccount();
+		Account customer = site.newCustomerPage().open().createRandomAccount();
 	}
 }

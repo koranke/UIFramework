@@ -2,7 +2,7 @@ package magentodemo.pages.newCustomerPage;
 
 import magentodemo.MagentoDemoSite;
 import magentodemo.components.PanelNavigation;
-import magentodemo.domain.Customer;
+import magentodemo.domain.Account;
 import magentodemo.pages.BaseMagentoDemoPage;
 import org.openqa.selenium.By;
 import ui.core.controls.Button;
@@ -40,14 +40,14 @@ public class NewCustomerPage extends BaseMagentoDemoPage<NewCustomerPage> {
 		return this;
 	}
 
-	public Customer createRandomAccount() {
-		Customer customer = new Customer().withMinDefaults();
-		textBoxFirstName.setText(customer.firstName());
-		textBoxLastName.setText(customer.lastName());
-		textBoxEmail.setText(customer.email());
-		textBoxPassword.setText(customer.password());
-		textBoxConfirmPassword.setText(customer.password());
+	public Account createRandomAccount() {
+		Account account = new Account().withDefaults();
+		textBoxFirstName.setText(account.customer().firstname());
+		textBoxLastName.setText(account.customer().lastname());
+		textBoxEmail.setText(account.customer().email());
+		textBoxPassword.setText(account.password());
+		textBoxConfirmPassword.setText(account.password());
 		buttonCreateAccount.click();
-		return customer;
+		return account;
 	}
 }

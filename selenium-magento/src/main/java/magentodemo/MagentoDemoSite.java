@@ -1,6 +1,7 @@
 package magentodemo;
 
 import magentodemo.pages.homePage.HomePage;
+import magentodemo.pages.myAccountPage.MyAccountPage;
 import magentodemo.pages.newCustomerPage.NewCustomerPage;
 import magentodemo.pages.searchResultsPage.SearchResultsPage;
 import magentodemo.pages.whatIsNewPage.WhatIsNewPage;
@@ -9,6 +10,7 @@ import ui.core.Site;
 public class MagentoDemoSite extends Site<MagentoDemoSite> {
 	private HomePage homePage;
 	private NewCustomerPage newCustomerPage;
+	private MyAccountPage myAccountPage;
 	private WhatIsNewPage whatIsNewPage;
 	private SearchResultsPage searchResultsPage;
 
@@ -47,5 +49,12 @@ public class MagentoDemoSite extends Site<MagentoDemoSite> {
 			searchResultsPage = new SearchResultsPage(this);
 		}
 		return searchResultsPage;
+	}
+
+	public MyAccountPage myAccountPage() {
+		if (myAccountPage == null) {
+			myAccountPage = new MyAccountPage(this);
+		}
+		return myAccountPage;
 	}
 }

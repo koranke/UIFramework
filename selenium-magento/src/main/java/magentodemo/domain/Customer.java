@@ -9,26 +9,31 @@ import java.util.List;
 
 @Data
 @Accessors(fluent = true)
-public class Customer {
-	private String firstName;
-	private String lastName;
+public class Customer extends BaseScenario {
+	private String firstname;
+	private String lastname;
 	private String email;
-	private String password;
 	private String company;
-	List<Address> addresses = new ArrayList<>();
+	List<Address> addresses;
 
 	public Customer withMinDefaults() {
-		this.firstName = RandomData.getRandomString(10);
-		this.lastName = RandomData.getRandomString(10);
-		this.email = RandomData.getRandomString(10) + "@test.com";
-		this.password = RandomData.getRandomString(12);
+		if (needsPopulation) {
+			this.firstname = RandomData.en.name().firstName();
+			this.lastname = RandomData.en.name().lastName();
+			this.email = RandomData.getRandomString(10) + "@test.com";
+			needsPopulation = false;
+		}
 		return this;
 	}
 
 	public Customer withFullDefaults() {
-		withMinDefaults();
-		this.company = RandomData.en.company().name();
-		this.addresses.add(new Address().withDefaults());
+		if (needsPopulation) {
+			withMinDefaults();
+			this.company = RandomData.en.company().name();
+			this.addresses = new ArrayList<>();
+			this.addresses.add(new Address().withDefaults());
+			needsPopulation = false;
+		}
 		return this;
 	}
 
