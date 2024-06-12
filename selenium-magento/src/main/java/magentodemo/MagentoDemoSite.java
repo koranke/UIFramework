@@ -1,6 +1,9 @@
 package magentodemo;
 
+import lombok.Getter;
+import lombok.Setter;
 import magentodemo.pages.homePage.HomePage;
+import magentodemo.pages.loginPage.LoginPage;
 import magentodemo.pages.myAccountPage.MyAccountPage;
 import magentodemo.pages.newCustomerPage.NewCustomerPage;
 import magentodemo.pages.searchResultsPage.SearchResultsPage;
@@ -8,7 +11,11 @@ import magentodemo.pages.whatIsNewPage.WhatIsNewPage;
 import ui.core.Site;
 
 public class MagentoDemoSite extends Site<MagentoDemoSite> {
+	@Getter
+	@Setter
+	private boolean isLoggedIn;
 	private HomePage homePage;
+	private LoginPage loginPage;
 	private NewCustomerPage newCustomerPage;
 	private MyAccountPage myAccountPage;
 	private WhatIsNewPage whatIsNewPage;
@@ -56,5 +63,12 @@ public class MagentoDemoSite extends Site<MagentoDemoSite> {
 			myAccountPage = new MyAccountPage(this);
 		}
 		return myAccountPage;
+	}
+
+	public LoginPage loginPage() {
+		if (loginPage == null) {
+			loginPage = new LoginPage(this);
+		}
+		return loginPage;
 	}
 }

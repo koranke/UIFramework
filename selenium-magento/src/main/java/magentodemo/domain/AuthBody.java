@@ -1,9 +1,11 @@
 package magentodemo.domain;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(fluent = true)
 public class AuthBody {
-	public String username;
-	public String password;
+	private String username;
+	private String password;
 }

@@ -5,6 +5,7 @@ import enums.AuthType;
 import io.restassured.response.Response;
 import magentodemo.domain.Account;
 import magentodemo.domain.AuthBody;
+import magentodemo.domain.Customer;
 
 public class CustomerApi extends ApiBase<CustomerApi> {
 
@@ -26,11 +27,13 @@ public class CustomerApi extends ApiBase<CustomerApi> {
 	}
 
 	public static Account getMe(String token) {
-		return tryGetMe(token)
+		Account account = new Account();
+		Customer customer = tryGetMe(token)
 			.then()
 			.statusCode(200)
 			.extract()
-			.as(Account.class);
+			.as(Customer.class);
+		return account.customer(customer);
 	}
 
 	public static Response tryGetMe(String token) {
