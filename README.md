@@ -32,8 +32,10 @@ through a series of classes, which represent the web page and any child dialogs 
 involves classes that model the core controls that a page may contain, like text boxes, check boxes, combo boxes and buttons.
 At the top level is a class that represents the website and exposes all the available pages.  Tests drive actions
 by utilizing the PCOM classes rather than directly calling the underlying UI automation technology.
+The framework even allows for the auto-generation of page classes if you have a cooperative developer who can add 
+"data-testid" attributes.
 
-Currently, this project is more of a proof-of-concept that demonstrates certain patterns and approaches to UI automation
+This project is a proof-of-concept that demonstrates certain patterns and approaches to UI automation
 rather than a fully-featured framework that can be dropped in as a dependency and immediately used.  It handles standard
 HTML elements but may be missing some element support, and it has no element support for any popular custom web control
 libraries.  There are two versions, one for Selenium and one for Playwright.  From a test perspective, they work the same. 
@@ -54,6 +56,8 @@ environment variables.  Allows for setting things like target browser and headle
 * Built-in support for running tests in parallel.
 * Built-in support for initializing and cleaning up Playwright or Selenium resources.
 * Easily interact with repeating elements.  For example, ```productsPage.listProducts().usingRow(2).labelPrice().assertText("12.50")"```
+* Work with backend APIs to assist in setting up test data. (See Selenium-magento project for an example.)
+* Use "scenario builders" to create test data. (See Selenium-magento project for an example.)
 
 ## Project Structure
 
@@ -65,6 +69,11 @@ PCOM framework using Playwright.
 
 ### Selenium
 PCOM framework using Selenium.
+
+### Selenium-magento
+Example with a complex E-commerce website.  Uses the live "magento" demo website as the application under test.  Hopefully
+this website will be available for a long time.  This project also includes examples of how to work with API calls
+and demonstrates the use of scenario builders for creating test data.
 
 ### Playwright-swaglabs / Selenium-swaglabs
 Example PCOM classes and tests when hand-coding classes.  Uses the live "swaglabs" demo website as the application under test.
@@ -363,6 +372,17 @@ public class ListProducts extends ListControl<ListProducts> {
 }
 ```
 
+Having done all this, you can now navigate a list/table of repeating elements and interact with the controls in each row.
+For example, adding a product to the cart based on the name of the product...
+```java
+productsPage.listProducts().usingLabelName().getRow("Product X").buttonAddToCart().click();
+```
+
+Or, you can just specify a row by row number...
+```java
+productsPage.listProducts().usingRow(2).textBoxQuantity().setText("2");
+```
+
 #### Special Note: Repeating elements within repeating elements
 If a row contains an element that no only repeats across rows but also repeats
 within the same row, this can be handled by creating a repeating element that
@@ -378,7 +398,7 @@ this.labelColor = new RepeatingControl<>(
         hasHeader
 );
 ```
-...followed by a getter method that takes accepts the parameter value.  For example...
+...followed by a getter method that takes the parameter value.  For example...
     
 ```java
 public Label labelColor(String color) {
