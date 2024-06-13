@@ -111,11 +111,10 @@ Once the site and related page classes have been coded, you can start writing te
 ```
 
 ## Examples
-Two different example projects, "swaglabs" and "testweb", are provided to help in getting started.  
-The Swaglabs project classes demonstrate a manually-coded model for a website.  The testweb project classes 
+Three different example projects, "magento", "swaglabs" and "testweb", are provided to help in getting started.  
+The Magento and Swaglabs project classes demonstrate a manually-coded model for a website.  The testweb project classes 
 demonstrate an auto-generated model for a website.  To use the testweb project, first expose the "testweb-website" directory
 html pages through a local web server so that they can be accessed through http://localhost.
-
 
 ## Components
 
