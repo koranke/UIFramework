@@ -37,4 +37,10 @@ public class Customer extends BaseScenario {
 		return this;
 	}
 
+	public void withAddress(Address address) {
+		if (addresses == null) {
+			addresses = new ArrayList<>();
+		}
+		this.addresses.add(address);
+	}
 }

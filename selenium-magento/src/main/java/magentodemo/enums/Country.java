@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Countries {
+public enum Country {
 	UK("United Kingdom"),
 	US("United States"),
 	FR("France"),

@@ -23,4 +23,18 @@ public class ApiTests extends TestBase {
 		Response response = CustomerApi.tryGetMe(token);
 		response.then().statusCode(200);
 	}
+
+	/*
+	Simple demonstration of how to use the Account scenario class
+	 */
+	@Test
+	public void testAccountScenario() {
+		Account account = new Account()
+				.includeBillingAddress(true)
+				.includeShippingAddress(true)
+				.create()
+				;
+
+		System.out.println(account.getContactInfo());
+	}
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum States {
+public enum State {
 	AK(2,"Alaska"),
 	AL(1, "Alabama"),
 	AR(5, "Arkansas"),
