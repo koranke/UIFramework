@@ -7,6 +7,7 @@
     * [Core](#core)
     * [Playwright](#playwright)
     * [Selenium](#selenium)
+    * [Selenium-magento](#selenium-magento)
     * [Playwright-swaglabs / Selenium-swaglabs](#playwright-swaglabs--selenium-swaglabs)
     * [Playwright-testweb / Selenium-testweb](#playwright-testweb--selenium-testweb)
   * [Getting Started](#getting-started)
@@ -23,6 +24,7 @@
       * [Step One](#step-one)
       * [Step Two](#step-two)
       * [Step Three](#step-three)
+      * [Special Note: Repeating elements within repeating elements](#special-note-repeating-elements-within-repeating-elements)
     * [Creating Tests](#creating-tests)
 <!-- TOC -->
 
