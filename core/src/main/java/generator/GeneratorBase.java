@@ -54,6 +54,7 @@ public abstract class GeneratorBase {
 		List<String> declarations = new ArrayList<>();
 		for (AttributeElement element : elements) {
 			String testId = element.getAttribute("data-testid");
+			log.debug("Processing element: " + testId);
 			if (processedElements.contains(testId)) {
 				continue;
 			} else {

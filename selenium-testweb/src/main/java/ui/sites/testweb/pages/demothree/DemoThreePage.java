@@ -13,6 +13,7 @@ import ui.sites.testweb.TestWebSite;
 public class DemoThreePage extends DemoThreeBasePage<DemoThreePage> {
     @Getter
     private final PaginationControl paginationControl;
+
     public DemoThreePage(TestWebSite portal) {
         super(portal);
         paginationControl = new PaginationControl(new Locator(portal.webDriver, ExtendedBy.testId("Pagination-Main")));

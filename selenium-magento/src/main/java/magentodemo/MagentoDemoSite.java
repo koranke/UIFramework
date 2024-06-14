@@ -2,6 +2,7 @@ package magentodemo;
 
 import lombok.Getter;
 import lombok.Setter;
+import magentodemo.pages.categoryPage.CategoryPage;
 import magentodemo.pages.homePage.HomePage;
 import magentodemo.pages.loginPage.LoginPage;
 import magentodemo.pages.myAccountPage.MyAccountPage;
@@ -20,6 +21,7 @@ public class MagentoDemoSite extends Site<MagentoDemoSite> {
 	private MyAccountPage myAccountPage;
 	private WhatIsNewPage whatIsNewPage;
 	private SearchResultsPage searchResultsPage;
+	private CategoryPage categoryPage;
 
 	public MagentoDemoSite() {
 		super();
@@ -70,5 +72,12 @@ public class MagentoDemoSite extends Site<MagentoDemoSite> {
 			loginPage = new LoginPage(this);
 		}
 		return loginPage;
+	}
+
+	public CategoryPage categoryPage(String department, String category) {
+		if (categoryPage == null) {
+			categoryPage = new CategoryPage(this, department, category);
+		}
+		return categoryPage;
 	}
 }

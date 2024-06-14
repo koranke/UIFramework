@@ -22,6 +22,7 @@ public class Locator {
 	private final By by;
 	private Integer index;
 	private Locator next;
+	private Locator parent;
 
 	/*
 	To be consistent with xpath, use 1-based index instead of 0-based index.
@@ -39,6 +40,11 @@ public class Locator {
 	public Locator withNext(By by, int index) {
 		this.next = new Locator(webDriver, by);
 		this.next.withIndex(index);
+		return this;
+	}
+
+	public Locator withParent(Locator parent) {
+		this.parent = parent;
 		return this;
 	}
 
@@ -63,6 +69,7 @@ public class Locator {
 	}
 
 	public WebElement getElement() {
+		if (parent != null) parentElement = parent.getElement();
 		if (parentElement != null) return getElement(parentElement);
 
 		WebElement webElement;
