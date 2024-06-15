@@ -3,6 +3,7 @@
 <!-- TOC -->
 * [UI Automation Framework](#ui-automation-framework)
   * [Features](#features)
+  * [Control Support](#control-support)
   * [Project Structure](#project-structure)
     * [Core](#core)
     * [Playwright](#playwright)
@@ -60,6 +61,15 @@ environment variables.  Allows for setting things like target browser and headle
 * Easily interact with repeating elements.  For example, ```productsPage.listProducts().usingRow(2).labelPrice().assertText("12.50")"```
 * Work with backend APIs to assist in setting up test data. (See Selenium-magento project for an example.)
 * Use "scenario builders" to create test data. (See Selenium-magento project for an example.)
+
+## Control Support
+* Most basic controls are supported, like text boxes, buttons, labels, combo boxes, radio buttons, checkboxes, etc.
+* Repeating elements in lists and tables.  For example, a list of products or a table of orders.
+* Pagination controls.
+* Tab controls.
+* Panels: a grouping of controls that can be used as a component in one or more pages.
+* Expansion Controls: a control that expands to show more options.
+* Custom controls can be added by extending the BaseControl class and adding any needed methods.
 
 ## Project Structure
 
