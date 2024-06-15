@@ -182,4 +182,12 @@ public abstract class BasePage<T> {
 		alert.sendKeys(response);
 		alert.accept();
 	}
+
+	public String getTitle() {
+		return webDriver.getTitle();
+	}
+
+	public void assertTitle(String expectedTitle) {
+		Assert.assertEquals(getTitle(), expectedTitle);
+	}
 }

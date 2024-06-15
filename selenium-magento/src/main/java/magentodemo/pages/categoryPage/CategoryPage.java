@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import magentodemo.MagentoDemoSite;
 import magentodemo.components.ListProducts;
 import magentodemo.components.PaginationMain;
+import magentodemo.components.PanelFilters;
 import magentodemo.components.PanelNavigation;
 import magentodemo.pages.BaseMagentoDemoPage;
 import org.openqa.selenium.By;
@@ -17,6 +18,7 @@ import ui.core.controls.SelectComboBox;
 @Accessors(fluent = true)
 public class CategoryPage extends BaseMagentoDemoPage<CategoryPage> {
 	private final PanelNavigation panelNavigation;
+	private final PanelFilters panelFilters;
 	private final ComboBox comboBoxSortBy;
 	private final Button buttonSortBy;
 	private final ListProducts listProducts;
@@ -26,6 +28,7 @@ public class CategoryPage extends BaseMagentoDemoPage<CategoryPage> {
 		super(site, String.format("%s/%s.html", department, category));
 
 		panelNavigation = new PanelNavigation(site.webDriver);
+		panelFilters = new PanelFilters(site.webDriver);
 		comboBoxSortBy = new SelectComboBox(site.webDriver, By.id("sorter"));
 		buttonSortBy = new Button(site.webDriver, By.xpath("//a[@data-role='direction-switcher']"));
 		this.listProducts = new ListProducts(
