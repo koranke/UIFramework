@@ -2,7 +2,7 @@ package magentodemo.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import magentodemo.api.CustomerApi;
+import magentodemo.api.MagentoApi;
 import utilities.RandomData;
 
 @Data
@@ -36,7 +36,7 @@ public class Account extends BaseScenario {
 
 	public Account create() {
 		withDefaults();
-		CustomerApi.create(this);
+		MagentoApi.customer().create(this);
 		return this;
 	}
 

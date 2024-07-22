@@ -14,7 +14,7 @@ public class TaggedLabel extends BaseControl {
     }
 
     public boolean isVisible(String item) {
-        return getLocator(String.format(xpath, item)).isVisible();
+        return getLocator(item).isVisible();
     }
 
     public void assertIsVisible(String item) {

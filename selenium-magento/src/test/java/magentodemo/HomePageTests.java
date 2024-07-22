@@ -51,8 +51,8 @@ public class HomePageTests extends TestBase {
 		HomePage homePage = new MagentoDemoSite().homePage().open();
 		ListProducts listProducts = homePage.listProducts();
 		List<Product> products = listProducts.getAllProducts();
-		listProducts.addProductToCart(products.get(0), 0 , 0);
-		listProducts.addProductToCart(products.get(1), 1 , 1);
+		homePage.addProductToCart(products.get(0), 0 , 0);
+		homePage.addProductToCart(products.get(1), 1 , 1);
 		homePage.panelNavigation().labelCartCount().assertText("2");
 	}
 

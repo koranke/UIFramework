@@ -2,7 +2,7 @@ package magentodemo;
 
 import general.TestBase;
 import io.restassured.response.Response;
-import magentodemo.api.CustomerApi;
+import magentodemo.api.MagentoApi;
 import magentodemo.domain.Account;
 import magentodemo.domain.Customer;
 import org.testng.annotations.BeforeClass;
@@ -22,11 +22,11 @@ public class CustomerAccountTests extends TestBase {
 				.customer(defaultCustomer)
 				.password("LXQkph8754==");
 
-		Response response = CustomerApi.tryGetToken(defaultAccount.getAuthBody());
+		Response response = MagentoApi.customer().tryGetToken(defaultAccount.getAuthBody());
 		if (response.statusCode() == 200) {
-			defaultAccount = CustomerApi.getMe(response.body().as(String.class));
+			defaultAccount = MagentoApi.customer().getMe(response.body().as(String.class));
 		} else {
-			defaultAccount = CustomerApi.create(defaultAccount);
+			defaultAccount = MagentoApi.customer().create(defaultAccount);
 		}
 		defaultAccount.password("LXQkph8754==");
 	}

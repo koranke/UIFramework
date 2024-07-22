@@ -9,11 +9,11 @@ import magentodemo.domain.Customer;
 
 public class CustomerApi extends ApiBase<CustomerApi> {
 
-	private CustomerApi() {
+	public CustomerApi() {
 		baseUrl = "https://magento.softwaretestingboard.com/rest/default/V1/";
 	}
 
-	public static String getToken(AuthBody body) {
+	public String getToken(AuthBody body) {
 		return tryGetToken(body)
 			.then()
 			.statusCode(200)
@@ -21,12 +21,12 @@ public class CustomerApi extends ApiBase<CustomerApi> {
 			.as(String.class);
 	}
 
-	public static Response tryGetToken(AuthBody body) {
+	public Response tryGetToken(AuthBody body) {
 		return new CustomerApi()
 			.post("integration/customer/token", body);
 	}
 
-	public static Account getMe(String token) {
+	public Account getMe(String token) {
 		Account account = new Account();
 		Customer customer = tryGetMe(token)
 			.then()
@@ -36,18 +36,18 @@ public class CustomerApi extends ApiBase<CustomerApi> {
 		return account.customer(customer);
 	}
 
-	public static Response tryGetMe(String token) {
+	public Response tryGetMe(String token) {
 		return new CustomerApi()
 			.withAuthType(AuthType.BEARER)
 			.withAuthorization(token)
 			.get("customers/me");
 	}
 
-	public static Response tryCreate(Account body) {
+	public Response tryCreate(Account body) {
 		return new CustomerApi().post("customers", body);
 	}
 
-	public static Account create(Account body) {
+	public Account create(Account body) {
 		return tryCreate(body)
 			.then()
 			.statusCode(200)

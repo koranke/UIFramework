@@ -43,6 +43,9 @@ public class CategoryPageTests extends TestBase {
 		MagentoDemoSite site = new MagentoDemoSite();
 		CategoryPage categoryPage = site.categoryPage("men", "tops-men").open();
 
+		System.out.println(categoryPage.pagination().getPages());
+		categoryPage.pagination().clickPage(2);
+
 		categoryPage.panelFilters().sizeColorFilter().selectItem("Size", "M");
 		categoryPage.panelFilters().labelFilterItem().assertIsVisible("M");
 
