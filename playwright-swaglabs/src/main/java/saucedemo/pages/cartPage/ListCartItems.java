@@ -37,7 +37,7 @@ public class ListCartItems extends ListControl<ListCartItems> {
 		);
 		labelName = new RepeatingControl<>(
 				locator,
-				"//div[@class='inventory_item_name ']",
+				"//div[@class='inventory_item_name']",
 				LocatorMethod.XPATH,
 				Label::new,
 				rowLocatorPattern,
