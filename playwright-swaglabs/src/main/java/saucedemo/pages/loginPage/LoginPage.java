@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import saucedemo.SauceDemoSite;
 import ui.core.controls.Button;
+import ui.core.controls.Label;
 import ui.core.controls.TextBox;
 import saucedemo.pages.BaseSauceDemoPage;
 
@@ -18,12 +19,14 @@ import java.util.List;
 public class LoginPage extends BaseSauceDemoPage<LoginPage> {
 	private final TextBox textBoxUserName;
 	private final TextBox textBoxPassword;
+	private final Label labelError;
 	private final Button buttonLogin;
 
 	public LoginPage(SauceDemoSite site) {
 		super(site, "");
 		textBoxUserName = new TextBox(page.locator("#user-name"));
 		textBoxPassword = new TextBox(page.locator("#password"));
+		labelError = new Label(page.locator("css=[data-test='error']"));
 		buttonLogin = new Button(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")));
 	}
 

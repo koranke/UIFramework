@@ -11,6 +11,7 @@ public class ListCartItems extends ListControl<ListCartItems> {
 	private final RepeatingControl<Label> labelQuantity;
 	private final RepeatingControl<Label> labelName;
 	private final RepeatingControl<Label> labelPrice;
+	private final RepeatingControl<Label> labelDescription;
 	private final RepeatingControl<Button> buttonRemove;
 
 	public ListCartItems(Locator locator) {
@@ -42,6 +43,14 @@ public class ListCartItems extends ListControl<ListCartItems> {
 				rowLocatorPattern,
 				hasHeader
 		);
+		labelDescription = new RepeatingControl<>(
+				locator,
+				"//div[@class='inventory_item_desc']",
+				LocatorMethod.XPATH,
+				Label::new,
+				rowLocatorPattern,
+				hasHeader
+		);
 		buttonRemove = new RepeatingControl<>(locator,
 				"Remove",
 				LocatorMethod.TEXT,
@@ -66,6 +75,10 @@ public class ListCartItems extends ListControl<ListCartItems> {
 
 	public Label labelPrice() {
 		return labelPrice.get(currentRow);
+	}
+
+	public Label labelDescription() {
+		return labelDescription.get(currentRow);
 	}
 
 	public Button buttonRemove() {
