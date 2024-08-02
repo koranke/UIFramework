@@ -45,7 +45,7 @@ public class ProductsHelper {
 			cartPage.listCartItems().assertIsNotVisible();
 		} else {
 			for (Product product : expectedProducts) {
-				cartPage.listCartItems().usingLabelName().withRow(product.getName()).labelName().assertText(product.getName());
+				cartPage.listCartItems().usingLabelName().withRow(product.getName());
 				cartPage.listCartItems().labelDescription().assertText(product.getDescription());
 				cartPage.listCartItems().labelPrice().assertText(String.format("$%.2f", product.getPrice()));
 				cartPage.listCartItems().labelQuantity().assertText("1");

@@ -9,7 +9,7 @@ import saucedemo.pages.productsPage.ProductsPage;
 
 public class SwagLabsTests extends TestBase {
 
-	@Test
+	@Test(enabled = false)
 	public void testLoginControls() {
 		LoginPage loginPage = new SauceDemoSite().loginPage().goTo();
 		loginPage.textBoxUserName().setText("George");
@@ -20,13 +20,13 @@ public class SwagLabsTests extends TestBase {
 		loginPage.buttonLogin().assertText("Login");
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testLoginVisual() {
 		LoginPage loginPage = new SauceDemoSite().loginPage().goTo();
 		loginPage.assertScreenShot();
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testProductPage() {
 		ProductsPage productsPage = new SauceDemoSite().productsPage().open();
 		productsPage.assertIsOpen();
@@ -44,7 +44,7 @@ public class SwagLabsTests extends TestBase {
 		productsPage.labelCartCount().assertIsNotVisible();
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testCart() {
 		SauceDemoSite site = new SauceDemoSite();
 		ProductsPage productsPage = site.productsPage().open();

@@ -109,6 +109,7 @@ public class RepeatingControl<T> extends BaseControl {
 				return i;
 			}
 		}
+		assert false : "Text not found: " + targetText;
 		return null;
 	}
 

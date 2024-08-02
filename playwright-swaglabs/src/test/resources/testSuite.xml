@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="swaglabs" thread-count="10" parallel="methods">
+    <test name="all">
+        <packages>
+            <package name="swaglabs"/>
+        </packages>
+    </test>
+</suite>
