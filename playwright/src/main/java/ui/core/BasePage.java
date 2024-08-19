@@ -147,4 +147,11 @@ public abstract class BasePage<T> {
 		return this.getClass().getSimpleName() + "Diff.png";
 	}
 
+	public String getTitle() {
+		return page.title();
+	}
+
+	public void assertTitle(String expectedTitle) {
+		Assert.assertEquals(getTitle(), expectedTitle);
+	}
 }
